@@ -12,6 +12,7 @@ import { useArticleState } from './hooks/useArticleState.js';
 import { useFeedData } from './hooks/useFeedData.js';
 import { useMediaQuery } from './hooks/useMediaQuery.js';
 import { usePersistentState } from './hooks/usePersistentState.js';
+import { useUnreadTitle } from './hooks/useUnreadTitle.js';
 import {
   buildCategoryCounts,
   buildFeedCounts,
@@ -101,6 +102,7 @@ export default function App() {
   const selectedArticle = selectedIndex >= 0 ? filtered[selectedIndex] : null;
   const totalUnread = countUnread(articles, readIds);
   const visibleUnread = countUnread(filtered, readIds);
+  useUnreadTitle(totalUnread);
   const starredCount = articles.reduce(
     (total, article) => total + (starredIds.has(article.id) ? 1 : 0),
     0,

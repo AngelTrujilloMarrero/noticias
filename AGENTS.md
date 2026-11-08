@@ -31,7 +31,8 @@ proxy local y Vercel lo resuelve con rewrites same-origin.
 - `src/components/`: interfaz (barra lateral, lista, artículo, barras y divisores).
 - `src/components/mobile/`: cabecera, tarjetas, artículo, cajón de fuentes y workspace de
   la interfaz móvil (≤ 760 px). El escritorio no usa estos componentes.
-- `src/hooks/`: datos de feeds, estado persistente y estado de lectura/destacados.
+- `src/hooks/`: datos de feeds, estado persistente, estado de lectura/destacados y
+  contador del título de la pestaña.
 - `src/config/feeds.js`: lista de fuentes RSS y ruta `/feed/<id>` (único sitio para
   añadir/quitar feeds; recuerda actualizar `vercel.json`).
 - `src/services/`: descarga concurrente, caché de 55 s y parseo RSS/Atom con `DOMParser`.

@@ -20,6 +20,7 @@ La referencia visual del proyecto es [`docs/quiterss.png`](docs/quiterss.png).
 - Opción persistente «Ocultar leídas» para que las noticias ya leídas dejen de aparecer
   en todas las vistas salvo «Destacados».
 - Actualización manual y automática cada 60 segundos con cuenta atrás visible.
+- El título de la pestaña muestra entre paréntesis el número de noticias no leídas.
 - Barras divisorias arrastrables (ancho del panel y altura de la lista).
 - Atajos de teclado: `↑`/`↓` para moverse, `Enter` para abrir la noticia original.
 - Interfaz móvil propia (≤ 760 px): cabecera compacta, filtros rápidos, tarjetas con
@@ -201,3 +202,5 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
   `NewsFeedback` y mantiene el iframe saneado sin scripts. Los estilos se dividen en
   `mobile.css`, `mobile-article.css`, `mobile-drawer.css` y `mobile-status.css` para
   respetar el límite de 400 líneas.
+- El título de la pestaña incluye el total de noticias no leídas, por ejemplo
+  `(12) Noticias — QuiteRSS`, y se actualiza al marcar leídas o al refrescar los feeds.
