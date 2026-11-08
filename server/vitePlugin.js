@@ -8,7 +8,7 @@ async function elhackerMiddleware(req, res, next) {
     return;
   }
 
-  const target = `https://blog.elhacker.net${url.pathname}${url.search}`;
+  const target = `https://blog.elhacker.net${url.pathname.replace(/^\/elhacker/, '')}${url.search}`;
   try {
     const html = await fetchText(target, { timeoutMs: 15000 });
     res.statusCode = 200;
