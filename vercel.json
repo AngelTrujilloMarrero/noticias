@@ -38,15 +38,15 @@
     },
     {
       "source": "/feed/midudev",
-      "destination": "https://fxtwitter.com/midudev/feed.xml"
+      "destination": "https://nitter.mizuki.st/midudev/rss"
     },
     {
       "source": "/feed/dotcsv",
-      "destination": "https://fxtwitter.com/DotCSV/feed.xml"
+      "destination": "https://nitter.mizuki.st/DotCSV/rss"
     },
     {
       "source": "/feed/llmmaster",
-      "destination": "https://fxtwitter.com/llmmaster/feed.xml"
+      "destination": "https://nitter.mizuki.st/llmmaster/rss"
     },
     {
       "source": "/feed/elhacker",
