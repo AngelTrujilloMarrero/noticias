@@ -215,3 +215,5 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
   cuando no quedan no leídas visibles.
 - Los titulares no leídos de la tabla de escritorio se muestran en negro, en lugar
   del azul de acento, para alinear su apariencia con la interfaz móvil.
+- La fila seleccionada de la tabla de escritorio deja de usar el fondo azul de
+  selección y pasa a fondo blanco con letras negras.

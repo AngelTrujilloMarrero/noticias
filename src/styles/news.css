@@ -64,8 +64,8 @@
 }
 
 .news-row.is-selected {
-  color: #fff;
-  background: var(--selection);
+  color: #111;
+  background: #fff;
 }
 
 .news-cell {
@@ -89,7 +89,7 @@
 .news-row.is-selected .news-title,
 .news-row.is-selected .news-title.is-read {
   font-weight: 600;
-  color: #fff;
+  color: #111;
 }
 
 .news-author,
@@ -112,7 +112,7 @@
 .news-row.is-selected .news-category,
 .news-row.is-selected .news-source,
 .news-row.is-selected .news-date {
-  color: #e8f5ff;
+  color: #111;
 }
 
 .news-date {
