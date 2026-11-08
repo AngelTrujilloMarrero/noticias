@@ -85,6 +85,7 @@ const SOURCES = [
     color: '#1da1f2',
     maxItems: 10,
     refreshIntervalMs: 5 * 60 * 1000,
+    direct: true,
   },
   {
     id: 'dotcsv',
@@ -95,6 +96,7 @@ const SOURCES = [
     color: '#1da1f2',
     maxItems: 10,
     refreshIntervalMs: 5 * 60 * 1000,
+    direct: true,
   },
   {
     id: 'llmmaster',
@@ -105,6 +107,7 @@ const SOURCES = [
     color: '#1da1f2',
     maxItems: 10,
     refreshIntervalMs: 5 * 60 * 1000,
+    direct: true,
   },
   {
     id: 'elhacker',
