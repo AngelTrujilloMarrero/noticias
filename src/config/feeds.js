@@ -76,6 +76,14 @@ const SOURCES = [
     icon: 'feeds/diariodeavisos.png',
     color: '#e30613',
   },
+  {
+    id: 'midudev',
+    name: 'midudev (Substack)',
+    url: 'https://midudev.substack.com/feed',
+    siteUrl: 'https://midudev.substack.com',
+    icon: 'feeds/midudev.png',
+    color: '#ff6719',
+  },
 ];
 
 export const FEEDS = SOURCES.map((feed) => ({

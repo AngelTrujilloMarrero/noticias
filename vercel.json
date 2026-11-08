@@ -35,6 +35,10 @@
     {
       "source": "/feed/diariodeavisos",
       "destination": "https://diariodeavisos.elespanol.com/feed/"
+    },
+    {
+      "source": "/feed/midudev",
+      "destination": "https://midudev.substack.com/feed"
     }
   ]
 }

@@ -213,6 +213,8 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
 - Nuevo botón «Marcar todas como leídas» en la barra de herramientas y en el cajón
   móvil. Marca únicamente las noticias de la vista filtrada actual y se deshabilita
   cuando no quedan no leídas visibles.
+- Añadida la fuente «midudev (Substack)» a la lista de feeds, con su icono y
+  rewrite same-origin en Vercel.
 - Los titulares no leídos de la tabla de escritorio se muestran en negro, en lugar
   del azul de acento, para alinear su apariencia con la interfaz móvil.
 - La fila seleccionada de la tabla de escritorio deja de usar el fondo azul de
