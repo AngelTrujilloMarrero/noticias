@@ -25,6 +25,6 @@ describe('configuración de feeds', () => {
       assert.equal(rewrites.get(feed.endpoint), feed.url, `Falta el rewrite de ${feed.id}`);
     }
 
-    assert.equal(rewrites.size, FEEDS.length);
+    assert.ok(rewrites.size >= FEEDS.length);
   });
 });

@@ -51,6 +51,10 @@
     {
       "source": "/feed/elhacker",
       "destination": "https://blog.elhacker.net/feeds/posts/default"
+    },
+    {
+      "source": "/elhacker/:path*",
+      "destination": "https://blog.elhacker.net/:path*"
     }
   ]
 }

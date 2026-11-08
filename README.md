@@ -217,6 +217,8 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
   avatar de midudev como icono y descarga directa por CORS.
 - Añadidas las fuentes «Carlos Santana (DotCSV)» y «LLM Master (X)» (FxTwitter)
   y «El Hacker (Blog)» (Blogger), con sus iconos y rewrites en Vercel.
+- El artículo completo de las noticias de El Hacker se carga desde su página
+  original y se muestra saneado en el panel de previsualización.
 - Los feeds de X (midudev, DotCSV y LLM Master) se limitan a las 10 últimas
   noticias y se refrescan cada 5 minutos.
 - Los titulares no leídos de la tabla de escritorio se muestran en negro, en lugar
