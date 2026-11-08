@@ -110,6 +110,11 @@ recuperar el foco de la pestaña.
 Vite (desarrollo) y Express (producción local) reenvían `/feed/<id>` a la URL real.
 En Vercel lo hacen los rewrites de `vercel.json`. No hay caché ni parseo en el servidor.
 
+Cada petición añade `?t=<marca de tiempo>` a `/feed/<id>`. El edge de Vercel usa la URL
+completa como clave de caché, así que cada refresco fuerza una descarga nueva en lugar
+de reutilizar una copia de hasta dos minutos. La CDN de cada medio sigue aplicando su
+propio `Cache-Control`, que es el límite real de frescura.
+
 ### Feeds
 
 Las fuentes se definen en `src/config/feeds.js`: Xataka, ADSLZone, Genbeta, eldia.es,
@@ -158,5 +163,7 @@ icono en `public/feeds/` y añadir el rewrite correspondiente en `vercel.json`. 
   `sanitize-html` en el cliente y caché de 55 s en memoria. Se elimina `/api/news`.
 - En local, Vite y Express exponen `/feed/<id>` como proxy; en Vercel lo resuelven
   rewrites same-origin, sin funciones serverless.
+- Las peticiones a `/feed/<id>` añaden `?t=<timestamp>` para saltarse la caché del edge
+  de Vercel y acercar la actualización al minuto real.
 - Añadidos tests de parseo RSS/Atom y de sincronización entre `feeds.js` y
   `vercel.json`.

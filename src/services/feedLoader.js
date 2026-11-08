@@ -71,12 +71,21 @@ function rebuildSnapshot() {
   return snapshot;
 }
 
+/**
+ * Añade un parámetro único a la ruta para que el edge de Vercel no reutilice
+ * una copia cacheada del XML. La CDN de cada medio sigue mandando.
+ */
+function withCacheBuster(endpoint, now = Date.now()) {
+  const separator = endpoint.includes('?') ? '&' : '?';
+  return `${endpoint}${separator}t=${now}`;
+}
+
 async function loadFeed(feed) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
   try {
-    const response = await fetch(feed.endpoint, {
+    const response = await fetch(withCacheBuster(feed.endpoint), {
       signal: controller.signal,
       cache: 'no-store',
       headers: {
@@ -157,4 +166,9 @@ export async function getNews({ force = false } = {}) {
   return result;
 }
 
-export const __testing = { REFRESH_MS, MAX_ARTICLES, createEmptySnapshot };
+export const __testing = {
+  REFRESH_MS,
+  MAX_ARTICLES,
+  createEmptySnapshot,
+  withCacheBuster,
+};
