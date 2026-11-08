@@ -49,6 +49,24 @@ npm start
 carpeta `dist/` y expone la misma API. Es necesario un entorno Node: los feeds no
 envían cabeceras CORS, así que la aplicación no funciona como sitio puramente estático.
 
+En ambos modos la descarga de los RSS la ejecuta Node.js, no el navegador: tu equipo
+con `npm run dev`/`npm start`, o las funciones serverless de Vercel. El cliente solo
+consume el JSON de `/api/news`.
+
+### Vercel
+
+El repositorio incluye funciones serverless en `api/news.js` y `api/health.js` que
+reutilizan el enrutador de `server/api.js`, por lo que la API funciona sin mantener un
+servidor Express. `vercel.json` fija `dist/` como salida y 60 segundos de duración
+máxima para las funciones.
+
+Para desplegar, importa el repositorio en Vercel y deja la configuración detectada
+(Vite). No hace falta configurar variables de entorno. Las funciones se ejecutan en
+frío la primera vez, así que la primera carga puede tardar unos segundos.
+
+GitHub Pages no sirve para esta aplicación tal cual: solo aloja archivos estáticos y no
+puede ejecutar la descarga de feeds ni evitar sus restricciones CORS.
+
 ## Scripts
 
 | Script | Descripción |
@@ -136,3 +154,5 @@ colocar su icono en `public/feeds/`.
   mantiene visible la noticia seleccionada hasta cambiar de selección.
 - Añadidos tests, comprobación del límite de 400 líneas por archivo, CI, Dependabot
   diario y flujo automático de actualización de Node.js LTS.
+- Soporte de despliegue en Vercel mediante funciones serverless (`/api/news` y
+  `/api/health`) que comparten el enrutador con Express.
