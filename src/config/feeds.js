@@ -83,7 +83,6 @@ const SOURCES = [
     siteUrl: 'https://x.com/midudev',
     icon: 'feeds/midudev.png',
     color: '#1da1f2',
-    direct: true,
   },
   {
     id: 'dotcsv',
