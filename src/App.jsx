@@ -57,7 +57,7 @@ export default function App() {
   const [hideRead, setHideRead] = usePersistentState('noticias:ocultar-leidas', false);
   const [query, setQuery] = useState('');
   const [selectedId, setSelectedId] = useState(null);
-  const { readIds, starredIds, markRead, toggleRead, toggleStar } = useArticleState();
+  const { readIds, starredIds, markRead, markManyRead, toggleRead, toggleStar } = useArticleState();
   const isMobile = useMediaQuery('(max-width: 760px)');
   const mainRef = useRef(null);
   const previousSelectedRef = useRef(null);
@@ -157,6 +157,11 @@ export default function App() {
   const toggleSelectedRead = useCallback(() => {
     if (selectedArticle) toggleRead(selectedArticle.id);
   }, [selectedArticle, toggleRead]);
+
+  const markAllRead = useCallback(() => {
+    if (filtered.length === 0) return;
+    markManyRead(filtered.map((article) => article.id));
+  }, [filtered, markManyRead]);
 
   const toggleSelectedStar = useCallback(() => {
     if (selectedArticle) toggleStar(selectedArticle.id);
@@ -272,6 +277,7 @@ export default function App() {
         onRefresh={refresh}
         onSelect={setSelectedId}
         onMarkRead={markRead}
+        onMarkAllRead={markAllRead}
         onToggleRead={toggleRead}
         onToggleStar={toggleStar}
         onOpen={openLink}
@@ -310,6 +316,8 @@ export default function App() {
         onToggleHideRead={() => setHideRead((previous) => !previous)}
         onToggleStar={toggleSelectedStar}
         onToggleRead={toggleSelectedRead}
+        onMarkAllRead={markAllRead}
+        canMarkAllRead={visibleUnread > 0}
         onOpenOriginal={openSelected}
         onHome={() => selectView(ALL_VIEW)}
         sidebarOpen={sidebarOpen}

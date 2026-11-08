@@ -128,6 +128,15 @@
   background: #eef3f8;
 }
 
+.m-drawer-toggle:disabled {
+  color: #9aa5b0;
+  background: transparent;
+}
+
+.m-drawer-action {
+  margin-top: 0;
+}
+
 .m-drawer-toggle-icon {
   display: flex;
   flex: 0 0 18px;

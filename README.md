@@ -13,10 +13,12 @@ La referencia visual del proyecto es [`docs/quiterss.png`](docs/quiterss.png).
 - Ocho feeds RSS importados de la instalación de QuiteRSS del autor.
 - El navegador descarga y parsea los RSS; no hay API ni backend de datos.
 - Panel lateral con feeds, categorías, no leídas y destacadas.
-- Tabla con título, autor, categoría y fecha de publicación.
+- Tabla con título, autor, categoría, fuente y fecha de publicación. El logo del feed
+  precede al titular y también alterna entre leída y no leída.
 - Previsualización del artículo saneada y aislada en un iframe sin scripts.
 - Búsqueda sin acentos en título, resumen, autor, feed y categorías.
-- Marcado de leídas y destacadas guardado en `localStorage`.
+- Marcado de leídas y destacadas guardado en `localStorage`, con una acción para marcar
+  como leídas todas las noticias de la vista actual.
 - Opción persistente «Ocultar leídas» para que las noticias ya leídas dejen de aparecer
   en todas las vistas salvo «Destacados».
 - Actualización manual y automática cada 60 segundos con cuenta atrás visible.
@@ -143,7 +145,8 @@ pensada para el pulgar y con menos densidad que la tabla de escritorio:
   fila inferior permite destacar, marcar como leída o abrir el original.
 - Artículo a pantalla completa con navegación anterior/siguiente. El HTML remoto sigue
   en el iframe saneado y con `sandbox`, sin scripts.
-- Cajón lateral con todas las fuentes, vistas fijas y categorías.
+- Cajón lateral con todas las fuentes, vistas fijas, categorías y la acción «Marcar
+  todas como leídas».
 - Barra de estado compacta con la última actualización y la cuenta atrás del refresco.
 
 El layout de escritorio no se modifica: la rama móvil se monta solo cuando la consulta
@@ -204,3 +207,9 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
   respetar el límite de 400 líneas.
 - El título de la pestaña incluye el total de noticias no leídas, por ejemplo
   `(12) Noticias — QuiteRSS`, y se actualiza al marcar leídas o al refrescar los feeds.
+- La tabla de escritorio añade la columna «Fuente» y muestra el logo del feed en la
+  celda de estado; al pulsarlo se alterna leída/no leída. El estado se representa con
+  opacidad y escala de grises, con un punto de respaldo si el feed no tiene icono.
+- Nuevo botón «Marcar todas como leídas» en la barra de herramientas y en el cajón
+  móvil. Marca únicamente las noticias de la vista filtrada actual y se deshabilita
+  cuando no quedan no leídas visibles.

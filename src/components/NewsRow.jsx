@@ -24,15 +24,28 @@ export function NewsRow({
       <span className="news-cell news-state" role="gridcell">
         <button
           type="button"
-          className={`read-toggle ${read ? 'is-read' : 'is-unread'}`.trim()}
+          className={`feed-toggle ${read ? 'is-read' : 'is-unread'}`.trim()}
           onClick={(event) => {
             event.stopPropagation();
             onToggleRead(article.id);
           }}
           title={read ? 'Marcar como no leída' : 'Marcar como leída'}
           aria-label={read ? 'Marcar como no leída' : 'Marcar como leída'}
+          aria-pressed={read}
         >
-          <span className="read-dot" />
+          {article.feedIcon ? (
+            <img
+              className="feed-logo"
+              src={article.feedIcon}
+              alt=""
+              width="14"
+              height="14"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <span className="read-dot" aria-hidden="true" />
+          )}
         </button>
       </span>
 
@@ -46,6 +59,10 @@ export function NewsRow({
 
       <span className={`news-cell news-category ${article.categories?.length ? '' : 'is-muted'}`.trim()} role="gridcell">
         {article.categories?.[0] || '—'}
+      </span>
+
+      <span className="news-cell news-source" role="gridcell" title={article.feedName}>
+        {article.feedName}
       </span>
 
       <span className="news-cell news-date" role="gridcell" title={formatLongDate(article.published)}>

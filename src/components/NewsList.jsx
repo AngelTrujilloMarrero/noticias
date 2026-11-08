@@ -41,6 +41,9 @@ export function NewsList({
           <span className="news-head-cell news-head-category" role="columnheader">
             Categoría
           </span>
+          <span className="news-head-cell news-head-source" role="columnheader">
+            Fuente
+          </span>
           <span className="news-head-cell news-head-date" role="columnheader">
             Publicado
           </span>

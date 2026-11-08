@@ -38,6 +38,7 @@ export function MobileWorkspace({
   onRefresh,
   onSelect,
   onMarkRead,
+  onMarkAllRead,
   onToggleRead,
   onToggleStar,
   onOpen,
@@ -70,6 +71,11 @@ export function MobileWorkspace({
   const handleToggleRead = (id) => {
     setReadTouched(true);
     onToggleRead(id);
+  };
+
+  const handleMarkAllRead = () => {
+    onMarkAllRead();
+    setDrawerOpen(false);
   };
 
   const handleCloseArticle = () => {
@@ -145,7 +151,9 @@ export function MobileWorkspace({
         starredCount={starredCount}
         loading={loading}
         hideRead={hideRead}
+        canMarkAllRead={visibleUnread > 0}
         onToggleHideRead={onToggleHideRead}
+        onMarkAllRead={handleMarkAllRead}
         onSelectView={handleSelectView}
         onClose={() => setDrawerOpen(false)}
       />

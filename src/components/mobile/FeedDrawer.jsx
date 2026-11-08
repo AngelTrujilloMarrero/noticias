@@ -1,5 +1,16 @@
 import { useEffect } from 'react';
-import { ChevronDown, ChevronRight, EyeOff, Inbox, Newspaper, Rss, Star, Tag, X } from 'lucide-react';
+import {
+  CheckCheck,
+  ChevronDown,
+  ChevronRight,
+  EyeOff,
+  Inbox,
+  Newspaper,
+  Rss,
+  Star,
+  Tag,
+  X,
+} from 'lucide-react';
 import { SidebarItem } from '../SidebarItem.jsx';
 import { isViewActive } from '../../utils/filters.js';
 
@@ -15,7 +26,9 @@ export function FeedDrawer({
   starredCount,
   loading,
   hideRead,
+  canMarkAllRead,
   onToggleHideRead,
+  onMarkAllRead,
   onSelectView,
   onClose,
 }) {
@@ -83,6 +96,18 @@ export function FeedDrawer({
             </span>
             <span className="m-drawer-toggle-label">Ocultar leídas</span>
             <span className="m-switch" aria-hidden="true" />
+          </button>
+
+          <button
+            type="button"
+            className="m-drawer-toggle m-drawer-action"
+            onClick={onMarkAllRead}
+            disabled={!canMarkAllRead}
+          >
+            <span className="m-drawer-toggle-icon">
+              <CheckCheck size={17} />
+            </span>
+            <span className="m-drawer-toggle-label">Marcar todas como leídas</span>
           </button>
 
           <p className="m-drawer-heading">

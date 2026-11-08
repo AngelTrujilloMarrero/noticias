@@ -1,6 +1,7 @@
 import {
   ArrowLeft,
   ArrowRight,
+  CheckCheck,
   Circle,
   CircleCheck,
   ExternalLink,
@@ -36,6 +37,8 @@ export function Toolbar({
   onToggleHideRead,
   onToggleStar,
   onToggleRead,
+  onMarkAllRead,
+  canMarkAllRead,
   onOpenOriginal,
   onHome,
   sidebarOpen,
@@ -71,6 +74,13 @@ export function Toolbar({
           disabled={!hasSelection}
         >
           {isRead ? <Circle size={15} /> : <CircleCheck size={15} />}
+        </IconButton>
+        <IconButton
+          label="Marcar todas como leídas"
+          onClick={onMarkAllRead}
+          disabled={!canMarkAllRead}
+        >
+          <CheckCheck size={15} />
         </IconButton>
         <IconButton
           label={hideRead ? 'Mostrar también las leídas' : 'Ocultar noticias leídas'}

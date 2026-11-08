@@ -14,7 +14,7 @@
   z-index: 1;
   display: grid;
   flex: 0 0 24px;
-  grid-template-columns: 20px minmax(0, 1fr) 98px 94px 73px 24px;
+  grid-template-columns: 20px minmax(0, 1fr) 92px 86px 96px 70px 24px;
   align-items: center;
   height: 24px;
   overflow: hidden;
@@ -48,7 +48,7 @@
 
 .news-row {
   display: grid;
-  grid-template-columns: 20px minmax(0, 1fr) 98px 94px 73px 24px;
+  grid-template-columns: 20px minmax(0, 1fr) 92px 86px 96px 70px 24px;
   align-items: center;
   height: 21px;
   overflow: hidden;
@@ -103,8 +103,14 @@
   color: #416b9c;
 }
 
+.news-source {
+  font-size: 11px;
+  color: #4a6d93;
+}
+
 .news-row.is-selected .news-author,
 .news-row.is-selected .news-category,
+.news-row.is-selected .news-source,
 .news-row.is-selected .news-date {
   color: #e8f5ff;
 }
@@ -125,7 +131,7 @@
   padding: 0;
 }
 
-.read-toggle,
+.feed-toggle,
 .star-toggle {
   display: grid;
   place-items: center;
@@ -136,6 +142,31 @@
   border: 0;
 }
 
+.feed-logo {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  border-radius: 2px;
+}
+
+.feed-toggle.is-read .feed-logo {
+  opacity: 0.4;
+  filter: grayscale(1);
+}
+
+.feed-toggle:hover .feed-logo {
+  opacity: 1;
+  filter: none;
+}
+
+.news-row.is-selected .feed-logo {
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 55%);
+}
+
+.news-row.is-selected .feed-toggle.is-read .feed-logo {
+  opacity: 0.6;
+}
+
 .read-dot {
   width: 7px;
   height: 7px;
@@ -144,7 +175,7 @@
   border-radius: 50%;
 }
 
-.read-toggle.is-read .read-dot {
+.feed-toggle.is-read .read-dot {
   background: transparent;
   border-color: #9aa7b4;
 }
@@ -154,7 +185,7 @@
   border-color: #fff;
 }
 
-.news-row.is-selected .read-toggle.is-read .read-dot {
+.news-row.is-selected .feed-toggle.is-read .read-dot {
   background: transparent;
 }
 
@@ -222,7 +253,7 @@
 @media (max-width: 900px) {
   .news-header,
   .news-row {
-    grid-template-columns: 20px minmax(0, 1fr) 94px 70px 24px;
+    grid-template-columns: 20px minmax(0, 1fr) 82px 92px 66px 24px;
   }
 
   .news-head-category,
@@ -238,7 +269,9 @@
   }
 
   .news-head-author,
-  .news-author {
+  .news-author,
+  .news-head-source,
+  .news-source {
     display: none;
   }
 }
