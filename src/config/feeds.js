@@ -83,6 +83,8 @@ const SOURCES = [
     siteUrl: 'https://x.com/midudev',
     icon: 'feeds/midudev.png',
     color: '#1da1f2',
+    maxItems: 10,
+    refreshIntervalMs: 5 * 60 * 1000,
   },
   {
     id: 'dotcsv',
@@ -91,6 +93,8 @@ const SOURCES = [
     siteUrl: 'https://x.com/DotCSV',
     icon: 'feeds/dotcsv.png',
     color: '#1da1f2',
+    maxItems: 10,
+    refreshIntervalMs: 5 * 60 * 1000,
   },
   {
     id: 'llmmaster',
@@ -99,6 +103,8 @@ const SOURCES = [
     siteUrl: 'https://x.com/llmmaster',
     icon: 'feeds/llmmaster.png',
     color: '#1da1f2',
+    maxItems: 10,
+    refreshIntervalMs: 5 * 60 * 1000,
   },
   {
     id: 'elhacker',

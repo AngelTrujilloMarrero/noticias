@@ -242,6 +242,10 @@ export function parseFeedXml(
 
   articles.sort((a, b) => new Date(b.published).getTime() - new Date(a.published).getTime());
 
+  if (Number.isInteger(feed?.maxItems) && feed.maxItems > 0) {
+    articles.splice(feed.maxItems);
+  }
+
   return {
     feed: feedMetadata(root, feed, isAtom),
     articles,

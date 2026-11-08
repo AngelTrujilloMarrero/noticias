@@ -123,17 +123,28 @@ function refreshFeeds() {
   lastAttemptAt = Date.now();
 
   inflight = (async () => {
-    const results = await Promise.allSettled(FEEDS.map((feed) => loadFeed(feed)));
+    const now = Date.now();
+    const feedsToLoad = FEEDS.filter((feed) => {
+      const previous = cache.get(feed.id);
+      const interval = feed.refreshIntervalMs || REFRESH_MS;
+      return !previous?.fetchedAt || now - new Date(previous.fetchedAt).getTime() >= interval;
+    });
 
-    results.forEach((result, index) => {
-      const feed = FEEDS[index];
+    const results = await Promise.allSettled(feedsToLoad.map((feed) => loadFeed(feed)));
+
+    let resultIndex = 0;
+    for (const feed of FEEDS) {
+      if (!feedsToLoad.includes(feed)) continue;
+      const result = results[resultIndex];
+      resultIndex += 1;
+
       if (result.status === 'fulfilled') {
         cache.set(feed.id, {
           articles: result.value.articles,
           fetchedAt: result.value.fetchedAt,
           error: null,
         });
-        return;
+        continue;
       }
 
       const previous = cache.get(feed.id);
@@ -142,7 +153,7 @@ function refreshFeeds() {
         fetchedAt: previous?.fetchedAt || null,
         error: result.reason?.message || 'No se pudo actualizar el feed',
       });
-    });
+    }
 
     return rebuildSnapshot();
   })().finally(() => {
