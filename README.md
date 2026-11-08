@@ -215,6 +215,8 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
   cuando no quedan no leídas visibles.
 - Añadida la fuente «midudev (X)» a la lista de feeds usando FxTwitter, con el
   avatar de midudev como icono y descarga directa por CORS.
+- Añadidas las fuentes «Carlos Santana (DotCSV)» y «LLM Master (X)» (FxTwitter)
+  y «El Hacker (Blog)» (Blogger), con sus iconos y rewrites en Vercel.
 - Los titulares no leídos de la tabla de escritorio se muestran en negro, en lugar
   del azul de acento, para alinear su apariencia con la interfaz móvil.
 - La fila seleccionada de la tabla de escritorio deja de usar el fondo azul de

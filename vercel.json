@@ -39,6 +39,18 @@
     {
       "source": "/feed/midudev",
       "destination": "https://fxtwitter.com/midudev/feed.xml"
+    },
+    {
+      "source": "/feed/dotcsv",
+      "destination": "https://fxtwitter.com/DotCSV/feed.xml"
+    },
+    {
+      "source": "/feed/llmmaster",
+      "destination": "https://fxtwitter.com/llmmaster/feed.xml"
+    },
+    {
+      "source": "/feed/elhacker",
+      "destination": "https://blog.elhacker.net/feeds/posts/default"
     }
   ]
 }

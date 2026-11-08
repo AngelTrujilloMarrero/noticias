@@ -85,6 +85,32 @@ const SOURCES = [
     color: '#1da1f2',
     direct: true,
   },
+  {
+    id: 'dotcsv',
+    name: 'Carlos Santana (DotCSV)',
+    url: 'https://fxtwitter.com/DotCSV/feed.xml',
+    siteUrl: 'https://x.com/DotCSV',
+    icon: 'feeds/dotcsv.png',
+    color: '#1da1f2',
+    direct: true,
+  },
+  {
+    id: 'llmmaster',
+    name: 'LLM Master (X)',
+    url: 'https://fxtwitter.com/llmmaster/feed.xml',
+    siteUrl: 'https://x.com/llmmaster',
+    icon: 'feeds/llmmaster.png',
+    color: '#1da1f2',
+    direct: true,
+  },
+  {
+    id: 'elhacker',
+    name: 'El Hacker (Blog)',
+    url: 'https://blog.elhacker.net/feeds/posts/default',
+    siteUrl: 'https://blog.elhacker.net',
+    icon: 'feeds/elhacker.png',
+    color: '#ff8c00',
+  },
 ];
 
 export const FEEDS = SOURCES.map((feed) => ({
