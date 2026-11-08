@@ -34,7 +34,7 @@ export function FeedsSidebar({
           <span className="sidebar-brand-icon">
             <Rss size={13} />
           </span>
-          <span>QuiteRSS</span>
+          <span>AngelRSS</span>
         </div>
         <IconButton label="Ocultar panel de feeds" onClick={onCollapse} className="sidebar-collapse">
           <PanelLeftClose size={13} />
