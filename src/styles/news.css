@@ -78,7 +78,7 @@
 
 .news-title {
   font-weight: 500;
-  color: var(--accent);
+  color: #111;
 }
 
 .news-title.is-read {
