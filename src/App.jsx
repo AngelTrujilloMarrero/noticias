@@ -361,6 +361,7 @@ export default function App() {
               error={error}
               hasQuery={Boolean(query.trim())}
               onSelect={setSelectedId}
+              onMarkRead={markRead}
               onToggleRead={toggleRead}
               onToggleStar={toggleStar}
               onOpen={openLink}

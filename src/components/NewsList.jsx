@@ -11,6 +11,7 @@ export function NewsList({
   error,
   hasQuery,
   onSelect,
+  onMarkRead,
   onToggleRead,
   onToggleStar,
   onOpen,
@@ -68,6 +69,7 @@ export function NewsList({
                 read={readIds.has(article.id)}
                 starred={starredIds.has(article.id)}
                 onSelect={onSelect}
+                onMarkRead={onMarkRead}
                 onToggleRead={onToggleRead}
                 onToggleStar={onToggleStar}
                 onOpen={onOpen}

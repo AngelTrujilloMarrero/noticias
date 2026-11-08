@@ -7,6 +7,7 @@ export function NewsRow({
   read,
   starred,
   onSelect,
+  onMarkRead,
   onToggleRead,
   onToggleStar,
   onOpen,
@@ -49,7 +50,15 @@ export function NewsRow({
         </button>
       </span>
 
-      <span className={`news-cell news-title ${read ? 'is-read' : ''}`.trim()} role="gridcell">
+      <span
+        className={`news-cell news-title ${read ? 'is-read' : ''}`.trim()}
+        role="gridcell"
+        onClick={(event) => {
+          event.stopPropagation();
+          onSelect(article.id);
+          onMarkRead?.(article.id);
+        }}
+      >
         {article.title}
       </span>
 

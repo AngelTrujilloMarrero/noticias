@@ -18,7 +18,7 @@
   align-items: center;
   height: 24px;
   overflow: hidden;
-  font-size: 11.5px;
+  font-size: 12.5px;
   font-weight: 600;
   color: #333;
   background: linear-gradient(#f8f9fa, #eef0f3);
@@ -52,7 +52,7 @@
   align-items: center;
   height: 21px;
   overflow: hidden;
-  font-size: 12px;
+  font-size: 13px;
   color: #111;
   cursor: default;
   border-bottom: 1px solid rgb(0 0 0 / 3%);
@@ -94,18 +94,18 @@
 
 .news-author,
 .news-date {
-  font-size: 11px;
+  font-size: 12px;
   color: #666;
 }
 
 .news-category {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   color: #111;
 }
 
 .news-source {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   color: #111;
 }
