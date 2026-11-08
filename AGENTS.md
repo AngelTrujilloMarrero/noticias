@@ -29,13 +29,17 @@ proxy local y Vercel lo resuelve con rewrites same-origin.
 
 - `src/App.jsx`: estado principal, vistas, selección y atajos de teclado.
 - `src/components/`: interfaz (barra lateral, lista, artículo, barras y divisores).
+- `src/components/mobile/`: cabecera, tarjetas, artículo, cajón de fuentes y workspace de
+  la interfaz móvil (≤ 760 px). El escritorio no usa estos componentes.
 - `src/hooks/`: datos de feeds, estado persistente y estado de lectura/destacados.
 - `src/config/feeds.js`: lista de fuentes RSS y ruta `/feed/<id>` (único sitio para
   añadir/quitar feeds; recuerda actualizar `vercel.json`).
 - `src/services/`: descarga concurrente, caché de 55 s y parseo RSS/Atom con `DOMParser`.
 - `src/utils/sanitize.js`: limpieza del HTML remoto en el navegador.
 - `src/utils/`: filtros, fechas y documento HTML del artículo.
-- `src/styles/`: `global.css`, `layout.css`, `sidebar.css`, `news.css`, `article.css`.
+- `src/styles/`: `global.css`, `layout.css`, `sidebar.css`, `news.css`, `article.css` y
+  los bloques móviles `mobile.css`, `mobile-article.css`, `mobile-drawer.css` y
+  `mobile-status.css`.
 - `server/vitePlugin.js` y `server/index.js`: proxy `/feed/<id>` en local.
 - `vercel.json`: rewrites same-origin de `/feed/<id>` hacia cada fuente.
 - `tests/`: pruebas con el runner nativo de Node (`node --test`).

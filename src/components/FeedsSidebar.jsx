@@ -11,13 +11,7 @@ import {
 } from 'lucide-react';
 import { IconButton } from './IconButton.jsx';
 import { SidebarItem } from './SidebarItem.jsx';
-
-function isActive(view, type, value) {
-  if (view.type !== type) return false;
-  if (type === 'feed') return view.id === value;
-  if (type === 'category') return view.name === value;
-  return true;
-}
+import { isViewActive } from '../utils/filters.js';
 
 export function FeedsSidebar({
   feeds,
@@ -61,7 +55,7 @@ export function FeedsSidebar({
                   iconSrc={feed.icon || undefined}
                   label={feed.name}
                   count={counts?.unread || 0}
-                  active={isActive(view, 'feed', feed.id)}
+                  active={isViewActive(view, 'feed', feed.id)}
                   onClick={() => onSelectView({ type: 'feed', id: feed.id })}
                   error={feed.error || undefined}
                   title={feed.error ? `${feed.name} — ${feed.error}` : feed.name}
@@ -88,21 +82,21 @@ export function FeedsSidebar({
                 icon={Newspaper}
                 label="Todas las noticias"
                 count={totalCount}
-                active={isActive(view, 'all')}
+                active={isViewActive(view, 'all')}
                 onClick={() => onSelectView({ type: 'all' })}
               />
               <SidebarItem
                 icon={Inbox}
                 label="Sin leer"
                 count={totalUnread}
-                active={isActive(view, 'unread')}
+                active={isViewActive(view, 'unread')}
                 onClick={() => onSelectView({ type: 'unread' })}
               />
               <SidebarItem
                 icon={Star}
                 label="Destacados"
                 count={starredCount}
-                active={isActive(view, 'starred')}
+                active={isViewActive(view, 'starred')}
                 onClick={() => onSelectView({ type: 'starred' })}
               />
 
@@ -120,7 +114,7 @@ export function FeedsSidebar({
                     icon={Tag}
                     label={category.name}
                     count={category.count}
-                    active={isActive(view, 'category', category.name)}
+                    active={isViewActive(view, 'category', category.name)}
                     onClick={() => onSelectView({ type: 'category', name: category.name })}
                   />
                 ))

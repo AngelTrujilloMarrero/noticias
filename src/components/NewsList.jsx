@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { AlertCircle, LoaderCircle, Newspaper, SearchX } from 'lucide-react';
-import { EmptyState } from './EmptyState.jsx';
+import { NewsFeedback } from './NewsFeedback.jsx';
 import { NewsRow } from './NewsRow.jsx';
 
 export function NewsList({
@@ -25,8 +24,8 @@ export function NewsList({
     row?.scrollIntoView({ block: 'nearest' });
   }, [selectedId]);
 
-  const showInitialLoading = loading && articles.length === 0;
-  const showError = !loading && error && articles.length === 0;
+  const showLoading = loading && articles.length === 0;
+  const showError = !loading && Boolean(error) && articles.length === 0;
 
   return (
     <section className="news-panel" aria-label="Lista de noticias">
@@ -48,42 +47,16 @@ export function NewsList({
           <span className="news-head-cell news-head-star" role="columnheader" />
         </div>
 
-        {showInitialLoading ? (
-          <EmptyState
-            icon={LoaderCircle}
-            title="Cargando noticias…"
-            action={<span className="spin"><LoaderCircle size={16} /></span>}
-          >
-            Consultando los feeds RSS.
-          </EmptyState>
-        ) : null}
+        <NewsFeedback
+          showLoading={showLoading}
+          showError={showError}
+          showEmpty={!showLoading && !showError && articles.length === 0}
+          hasQuery={hasQuery}
+          error={error}
+          onRetry={onRetry}
+        />
 
-        {showError ? (
-          <EmptyState
-            icon={AlertCircle}
-            title="No se pudieron cargar las noticias"
-            action={
-              <button type="button" className="text-button" onClick={onRetry}>
-                Reintentar
-              </button>
-            }
-          >
-            {error}
-          </EmptyState>
-        ) : null}
-
-        {!showInitialLoading && !showError && articles.length === 0 ? (
-          <EmptyState
-            icon={hasQuery ? SearchX : Newspaper}
-            title={hasQuery ? 'Sin resultados' : 'No hay noticias en esta vista'}
-          >
-            {hasQuery
-              ? 'Prueba con otra búsqueda o limpia el filtro.'
-              : 'Las noticias aparecerán aquí en cuanto se actualicen los feeds.'}
-          </EmptyState>
-        ) : null}
-
-        {!showInitialLoading && !showError
+        {!showLoading && !showError
           ? articles.map((article) => (
               <NewsRow
                 key={article.id}

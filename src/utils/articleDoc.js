@@ -37,6 +37,16 @@ const DEFAULT_DOC_STYLE = `
   iframe, script, style, form, input, button { display: none !important; }
 `;
 
+const MOBILE_DOC_STYLE = `
+  body {
+    padding: 14px 16px 40px;
+    font-size: 16px;
+    line-height: 1.45;
+  }
+  h1 { font-size: 1.35em; }
+  h2 { font-size: 1.2em; }
+`;
+
 function escapeAttribute(value) {
   return String(value || '')
     .replaceAll('&', '&amp;')
@@ -45,12 +55,13 @@ function escapeAttribute(value) {
     .replaceAll('>', '&gt;');
 }
 
-export function buildArticleDocument(article) {
+export function buildArticleDocument(article, { mobile = false } = {}) {
   if (!article) return '';
 
   const baseUrl = article.link || '';
   const title = escapeAttribute(article.title || 'Noticia');
   const content = article.content || `<p>${escapeAttribute(article.summary || '')}</p>`;
+  const style = mobile ? `${DEFAULT_DOC_STYLE}${MOBILE_DOC_STYLE}` : DEFAULT_DOC_STYLE;
 
   return `<!doctype html>
 <html lang="es">
@@ -59,7 +70,7 @@ export function buildArticleDocument(article) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <base href="${escapeAttribute(baseUrl)}" target="_blank">
 <title>${title}</title>
-<style>${DEFAULT_DOC_STYLE}</style>
+<style>${style}</style>
 </head>
 <body>${content}</body>
 </html>`;

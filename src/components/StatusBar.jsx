@@ -31,7 +31,33 @@ export function StatusBar({
   error,
   nextRefreshAt,
   refreshing,
+  compact = false,
 }) {
+  if (compact) {
+    return (
+      <footer className="statusbar statusbar--compact" aria-live="polite">
+        <div className="status-left" title={error || undefined}>
+          {error ? (
+            <>
+              <AlertCircle size={12} className="status-error-icon" />
+              <span className="status-error-text">{error}</span>
+            </>
+          ) : (
+            <span className="status-item status-ready">
+              Actualizado: {formatClock(updatedAt)}
+            </span>
+          )}
+        </div>
+
+        <div className="status-right">
+          <span className="status-item">{unreadCount} sin leer</span>
+          <span className="status-divider" />
+          <Countdown nextRefreshAt={nextRefreshAt} refreshing={refreshing} />
+        </div>
+      </footer>
+    );
+  }
+
   return (
     <footer className="statusbar" aria-live="polite">
       <div className="status-left" title={error || undefined}>

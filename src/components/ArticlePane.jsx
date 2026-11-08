@@ -3,8 +3,11 @@ import { LoaderCircle, Newspaper } from 'lucide-react';
 import { buildArticleDocument } from '../utils/articleDoc.js';
 import { EmptyState } from './EmptyState.jsx';
 
-export function ArticlePane({ article, loading }) {
-  const documentHtml = useMemo(() => buildArticleDocument(article), [article]);
+export function ArticlePane({ article, loading, variant = 'desktop' }) {
+  const documentHtml = useMemo(
+    () => buildArticleDocument(article, { mobile: variant === 'mobile' }),
+    [article, variant],
+  );
 
   if (!article) {
     return (

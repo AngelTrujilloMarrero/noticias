@@ -6,6 +6,10 @@ import './styles/layout.css';
 import './styles/sidebar.css';
 import './styles/news.css';
 import './styles/article.css';
+import './styles/mobile.css';
+import './styles/mobile-article.css';
+import './styles/mobile-drawer.css';
+import './styles/mobile-status.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

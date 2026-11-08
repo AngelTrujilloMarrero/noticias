@@ -1,5 +1,13 @@
 const SEARCH_FIELDS = ['title', 'summary', 'author', 'feedName', 'categories'];
 
+/** Comprueba si una vista coincide con el elemento de navegación indicado. */
+export function isViewActive(view, type, value) {
+  if (view.type !== type) return false;
+  if (type === 'feed') return view.id === value;
+  if (type === 'category') return view.name === value;
+  return true;
+}
+
 export function normalizeText(value) {
   return String(value || '')
     .normalize('NFD')

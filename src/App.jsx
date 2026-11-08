@@ -7,8 +7,10 @@ import { Splitter } from './components/Splitter.jsx';
 import { StatusBar } from './components/StatusBar.jsx';
 import { TabBar } from './components/TabBar.jsx';
 import { Toolbar } from './components/Toolbar.jsx';
+import { MobileWorkspace } from './components/mobile/MobileWorkspace.jsx';
 import { useArticleState } from './hooks/useArticleState.js';
 import { useFeedData } from './hooks/useFeedData.js';
+import { useMediaQuery } from './hooks/useMediaQuery.js';
 import { usePersistentState } from './hooks/usePersistentState.js';
 import {
   buildCategoryCounts,
@@ -55,6 +57,7 @@ export default function App() {
   const [query, setQuery] = useState('');
   const [selectedId, setSelectedId] = useState(null);
   const { readIds, starredIds, markRead, toggleRead, toggleStar } = useArticleState();
+  const isMobile = useMediaQuery('(max-width: 760px)');
   const mainRef = useRef(null);
   const previousSelectedRef = useRef(null);
 
@@ -65,10 +68,14 @@ export default function App() {
   const feedMap = useMemo(() => new Map(feeds.map((feed) => [feed.id, feed])), [feeds]);
   const enrichedArticles = useMemo(
     () =>
-      articles.map((article) => ({
-        ...article,
-        feedName: feedMap.get(article.feedId)?.name || 'Feed',
-      })),
+      articles.map((article) => {
+        const feed = feedMap.get(article.feedId);
+        return {
+          ...article,
+          feedName: feed?.name || 'Feed',
+          feedIcon: feed?.icon || '',
+        };
+      }),
     [articles, feedMap],
   );
 
@@ -93,6 +100,7 @@ export default function App() {
   const selectedIndex = filtered.findIndex((article) => article.id === selectedId);
   const selectedArticle = selectedIndex >= 0 ? filtered[selectedIndex] : null;
   const totalUnread = countUnread(articles, readIds);
+  const visibleUnread = countUnread(filtered, readIds);
   const starredCount = articles.reduce(
     (total, article) => total + (starredIds.has(article.id) ? 1 : 0),
     0,
@@ -230,6 +238,47 @@ export default function App() {
   const viewLabel = getViewLabel(view, feedMap);
   const viewIcon = getViewIcon(view, feedMap);
   const sidebarOpen = layout.sidebarOpen !== false;
+
+  if (isMobile) {
+    return (
+      <MobileWorkspace
+        view={view}
+        viewLabel={viewLabel}
+        viewIcon={viewIcon}
+        feeds={feeds}
+        feedCounts={feedCounts}
+        categories={categoryCounts}
+        totalCount={articles.length}
+        totalUnread={totalUnread}
+        starredCount={starredCount}
+        articles={filtered}
+        visibleUnread={visibleUnread}
+        selectedArticle={selectedArticle}
+        selectedIndex={selectedIndex}
+        readIds={readIds}
+        starredIds={starredIds}
+        loading={loading}
+        refreshing={refreshing}
+        error={error}
+        query={query}
+        updatedAt={snapshot?.updatedAt}
+        nextRefreshAt={nextRefreshAt}
+        hideRead={hideRead}
+        onToggleHideRead={() => setHideRead((previous) => !previous)}
+        onSelectView={selectView}
+        onQueryChange={setQuery}
+        onRefresh={refresh}
+        onSelect={setSelectedId}
+        onMarkRead={markRead}
+        onToggleRead={toggleRead}
+        onToggleStar={toggleStar}
+        onOpen={openLink}
+        onRetry={refresh}
+        onPrev={goPrevious}
+        onNext={goNext}
+      />
+    );
+  }
 
   return (
     <div className="app">

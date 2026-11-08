@@ -29,4 +29,14 @@ describe('buildArticleDocument', () => {
   it('devuelve una cadena vacía sin artículo', () => {
     assert.equal(buildArticleDocument(null), '');
   });
+
+  it('adapta el contenido a la lectura en móvil', () => {
+    const document = buildArticleDocument(
+      { title: 'Noticia', link: 'https://example.com/', content: '<p>Texto</p>' },
+      { mobile: true },
+    );
+
+    assert.match(document, /padding: 14px 16px 40px/);
+    assert.match(document, /font-size: 16px/);
+  });
 });

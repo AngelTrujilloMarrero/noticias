@@ -22,7 +22,9 @@ La referencia visual del proyecto es [`docs/quiterss.png`](docs/quiterss.png).
 - Actualización manual y automática cada 60 segundos con cuenta atrás visible.
 - Barras divisorias arrastrables (ancho del panel y altura de la lista).
 - Atajos de teclado: `↑`/`↓` para moverse, `Enter` para abrir la noticia original.
-- Interfaz adaptable a pantallas estrechas.
+- Interfaz móvil propia (≤ 760 px): cabecera compacta, filtros rápidos, tarjetas con
+  imagen, cajón de fuentes y artículo a pantalla completa. El escritorio conserva el
+  diseño de QuiteRSS.
 
 ## Requisitos
 
@@ -84,14 +86,15 @@ puede reescribir `/feed/<id>` hacia las fuentes originales.
 src/
   App.jsx              estado principal, vistas y atajos
   components/          barra de pestañas, toolbar, sidebar, lista, artículo, estado
+  components/mobile/   cabecera, tarjetas, artículo, cajón y espacio de trabajo móvil
   config/feeds.js      lista de fuentes y ruta /feed/<id>
-  hooks/               datos de feeds, estado persistente, lectura y destacados
+  hooks/               datos de feeds, estado persistente, lectura, destacados y breakpoint
   services/feedLoader.js  descarga concurrente y caché de 55 s en el navegador
   services/parseFeed.js   normalización de RSS/Atom con DOMParser
   services/api.js         fachada que usa el hook de datos
   utils/sanitize.js    limpieza del HTML remoto
   utils/               filtros, fechas y documento HTML del artículo
-  styles/              global, layout, sidebar, news y article
+  styles/              global, layout, sidebar, news, article y bloques mobile-*
 server/
   lib/http.js          descarga HTTP con timeout y user-agent
   index.js             servidor Express con proxy /feed/<id>
@@ -127,6 +130,23 @@ MuyLinux, BandaAncha, El Español y Diario de Avisos. Para añadir una fuente ha
 incluir una entrada con `id`, `name`, `url`, `siteUrl`, `icon` y `color`, colocar su
 icono en `public/feeds/` y añadir el rewrite correspondiente en `vercel.json`. El test
 `tests/feeds.test.js` falla si ambos sitios dejan de estar sincronizados.
+
+### Interfaz móvil
+
+Por debajo de 760 px (`useMediaQuery`) la aplicación cambia a una experiencia propia,
+pensada para el pulgar y con menos densidad que la tabla de escritorio:
+
+- Cabecera compacta con acceso al cajón de fuentes, búsqueda plegable, actualización
+  manual y filtros rápidos «Todo», «Sin leer» y «Destacadas».
+- Tarjetas con imagen, feed, fecha, resumen y etiquetas; un toque abre el artículo y la
+  fila inferior permite destacar, marcar como leída o abrir el original.
+- Artículo a pantalla completa con navegación anterior/siguiente. El HTML remoto sigue
+  en el iframe saneado y con `sandbox`, sin scripts.
+- Cajón lateral con todas las fuentes, vistas fijas y categorías.
+- Barra de estado compacta con la última actualización y la cuenta atrás del refresco.
+
+El layout de escritorio no se modifica: la rama móvil se monta solo cuando la consulta
+de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
 
 ### Estado local
 
@@ -175,3 +195,9 @@ icono en `public/feeds/` y añadir el rewrite correspondiente en `vercel.json`. 
   intermediarios.
 - Añadidos tests de parseo RSS/Atom y de sincronización entre `feeds.js` y
   `vercel.json`.
+- Nueva interfaz móvil (≤ 760 px) independiente del layout de escritorio: cabecera
+  compacta, filtros rápidos, tarjetas con imagen, cajón de fuentes y artículo a pantalla
+  completa. Comparte estados de carga/error/vacío con el escritorio mediante
+  `NewsFeedback` y mantiene el iframe saneado sin scripts. Los estilos se dividen en
+  `mobile.css`, `mobile-article.css`, `mobile-drawer.css` y `mobile-status.css` para
+  respetar el límite de 400 líneas.

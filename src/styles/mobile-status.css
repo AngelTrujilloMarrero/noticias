@@ -1,0 +1,163 @@
+/* Barra de estado compacta */
+.m-shell .statusbar--compact {
+  flex: 0 0 auto;
+  height: calc(30px + env(safe-area-inset-bottom));
+  padding: 0 12px env(safe-area-inset-bottom);
+  font-size: 11.5px;
+  background: #f7f9fb;
+  border-top: 1px solid #e2e7ec;
+}
+
+/* El layout de escritorio oculta el primer dato de la barra en pantallas
+   estrechas; en móvil interesa conservar el contador de no leídas. */
+.m-shell .statusbar--compact .status-right .status-item:first-child {
+  display: inline-flex;
+}
+
+/* Cajón de fuentes */
+.m-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+}
+
+.m-drawer-backdrop {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  background: rgba(15, 25, 35, 0.4);
+  border: 0;
+  animation: m-fade-in 160ms ease-out;
+}
+
+.m-drawer-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(86vw, 360px);
+  height: 100%;
+  padding-top: env(safe-area-inset-top);
+  background: #fff;
+  box-shadow: 6px 0 24px rgba(15, 25, 35, 0.18);
+  animation: m-slide-in 180ms ease-out;
+}
+
+.m-drawer-header {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  padding: 0 8px 0 16px;
+  border-bottom: 1px solid #e6eaee;
+}
+
+.m-drawer-title {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.m-drawer-scroll {
+  flex: 1;
+  min-height: 0;
+  padding: 6px 8px calc(24px + env(safe-area-inset-bottom));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.m-drawer-heading {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 16px 8px 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #8a95a1;
+  text-transform: uppercase;
+}
+
+.m-drawer-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.m-drawer-empty {
+  padding: 8px;
+  font-size: 12.5px;
+  color: #8a95a1;
+}
+
+.m-drawer .sidebar-item {
+  gap: 10px;
+  height: 44px;
+  padding: 0 10px;
+  font-size: 14px;
+  border-radius: 9px;
+}
+
+.m-drawer .sidebar-item:hover {
+  background: #eef3f8;
+}
+
+.m-drawer .sidebar-item.is-active {
+  font-weight: 600;
+  color: #0b5fa5;
+  background: #e8f1fa;
+}
+
+.m-drawer .sidebar-item.is-active .sidebar-item-icon,
+.m-drawer .sidebar-item.is-active .sidebar-item-count {
+  color: #0b5fa5;
+}
+
+.m-drawer .sidebar-item-icon,
+.m-drawer .sidebar-item-icon img {
+  flex-basis: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.m-drawer .sidebar-item-count {
+  font-size: 12px;
+}
+
+/* Animaciones */
+@keyframes m-article-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes m-slide-in {
+  from {
+    transform: translateX(-16px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes m-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m-article,
+  .m-drawer-panel,
+  .m-drawer-backdrop {
+    animation: none;
+  }
+}
