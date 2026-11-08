@@ -1,9 +1,9 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { feedApiPlugin } from './server/vitePlugin.js';
+import { feedProxyPlugin } from './server/vitePlugin.js';
 
 export default defineConfig({
-  plugins: [react(), feedApiPlugin()],
+  plugins: [react(), feedProxyPlugin()],
   server: {
     port: 5173,
     host: '127.0.0.1',

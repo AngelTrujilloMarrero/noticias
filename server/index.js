@@ -2,8 +2,8 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express from 'express';
-import { handleApi } from './api.js';
-import { refreshFeeds } from './lib/feedService.js';
+import { FEED_BY_ID } from '../src/config/feeds.js';
+import { fetchText } from './lib/http.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.resolve(__dirname, '..', 'dist');
@@ -13,14 +13,20 @@ const port = Number(process.env.PORT) || 4173;
 const app = express();
 app.disable('x-powered-by');
 
-app.use('/api', async (req, res, next) => {
+app.get('/feed/:id', async (req, res) => {
+  const feed = FEED_BY_ID.get(req.params.id);
+  if (!feed) {
+    res.status(404).json({ error: 'Feed no encontrado' });
+    return;
+  }
+
   try {
-    const url = new URL(req.originalUrl, `http://${req.headers.host || 'localhost'}`);
-    const handled = await handleApi(req, res, url);
-    if (!handled) next();
+    const xml = await fetchText(feed.url);
+    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-store');
+    res.send(xml);
   } catch (error) {
-    if (res.writableEnded) return;
-    res.status(500).json({ error: error?.message || 'Error interno' });
+    res.status(502).json({ error: error?.message || 'No se pudo descargar el feed' });
   }
 });
 
@@ -47,7 +53,4 @@ app.use((error, req, res, next) => {
 
 app.listen(port, () => {
   console.log(`Noticias disponible en http://localhost:${port}`);
-  refreshFeeds().catch((error) => {
-    console.error('No se pudieron precargar los feeds:', error.message);
-  });
 });

@@ -11,6 +11,7 @@ La referencia visual del proyecto es [`docs/quiterss.png`](docs/quiterss.png).
 ## Funciones
 
 - Ocho feeds RSS importados de la instalación de QuiteRSS del autor.
+- El navegador descarga y parsea los RSS; no hay API ni backend de datos.
 - Panel lateral con feeds, categorías, no leídas y destacadas.
 - Tabla con título, autor, categoría y fecha de publicación.
 - Previsualización del artículo saneada y aislada en un iframe sin scripts.
@@ -35,8 +36,12 @@ npm install
 npm run dev
 ```
 
-La aplicación queda disponible en <http://127.0.0.1:5173>. El servidor de desarrollo de
-Vite incluye la API de feeds, por lo que no hace falta arrancar nada más.
+La aplicación queda disponible en <http://127.0.0.1:5173>. Vite incluye un proxy para
+`/feed/<id>` que evita las restricciones CORS de las fuentes durante el desarrollo.
+
+El navegador es quien descarga y parsea los RSS con `DOMParser`. Las fuentes que no
+envían cabeceras CORS se piden a una ruta same-origin `/feed/<id>` que en local resuelve
+Vite o Express y en producción resuelven los rewrites de Vercel.
 
 ### Producción
 
@@ -46,34 +51,28 @@ npm start
 ```
 
 `npm start` levanta Express en el puerto `4173` (configurable con `PORT`), sirve la
-carpeta `dist/` y expone la misma API. Es necesario un entorno Node: los feeds no
-envían cabeceras CORS, así que la aplicación no funciona como sitio puramente estático.
-
-En ambos modos la descarga de los RSS la ejecuta Node.js, no el navegador: tu equipo
-con `npm run dev`/`npm start`, o las funciones serverless de Vercel. El cliente solo
-consume el JSON de `/api/news`.
+carpeta `dist/` y expone el proxy `/feed/<id>`. Express no descarga ni cachea noticias:
+solo reenvía el XML para que lo parsee el navegador.
 
 ### Vercel
 
-El repositorio incluye funciones serverless en `api/news.js` y `api/health.js` que
-reutilizan el enrutador de `server/api.js`, por lo que la API funciona sin mantener un
-servidor Express. `vercel.json` fija `dist/` como salida y 60 segundos de duración
-máxima para las funciones.
+`vercel.json` fija `dist/` como salida y define un rewrite por feed (`/feed/xataka`,
+`/feed/genbeta`, etc.) hacia su URL original. Para el navegador todas las fuentes son
+same-origin, así que no hay problemas de CORS ni funciones serverless.
 
 Para desplegar, importa el repositorio en Vercel y deja la configuración detectada
-(Vite). No hace falta configurar variables de entorno. Las funciones se ejecutan en
-frío la primera vez, así que la primera carga puede tardar unos segundos.
+(Vite). No hace falta configurar variables de entorno.
 
 GitHub Pages no sirve para esta aplicación tal cual: solo aloja archivos estáticos y no
-puede ejecutar la descarga de feeds ni evitar sus restricciones CORS.
+puede reescribir `/feed/<id>` hacia las fuentes originales.
 
 ## Scripts
 
 | Script | Descripción |
 | --- | --- |
-| `npm run dev` | Servidor de desarrollo con API integrada. |
+| `npm run dev` | Servidor de desarrollo con proxy `/feed/<id>`. |
 | `npm run build` | Genera la aplicación de producción en `dist/`. |
-| `npm start` | Servidor Express de producción. |
+| `npm start` | Servidor Express de producción con proxy `/feed/<id>`. |
 | `npm run lint` | ESLint sobre todo el proyecto. |
 | `npm test` | Pruebas con el runner nativo de Node. |
 | `npm run check:lines` | Falla si algún archivo de código supera 400 líneas. |
@@ -85,38 +84,39 @@ puede ejecutar la descarga de feeds ni evitar sus restricciones CORS.
 src/
   App.jsx              estado principal, vistas y atajos
   components/          barra de pestañas, toolbar, sidebar, lista, artículo, estado
+  config/feeds.js      lista de fuentes y ruta /feed/<id>
   hooks/               datos de feeds, estado persistente, lectura y destacados
-  services/api.js      llamadas a /api
+  services/feedLoader.js  descarga concurrente y caché de 55 s en el navegador
+  services/parseFeed.js   normalización de RSS/Atom con DOMParser
+  services/api.js         fachada que usa el hook de datos
+  utils/sanitize.js    limpieza del HTML remoto
   utils/               filtros, fechas y documento HTML del artículo
   styles/              global, layout, sidebar, news y article
 server/
-  config/feeds.js      lista de fuentes RSS
   lib/http.js          descarga HTTP con timeout y user-agent
-  lib/parseFeed.js     normalización de RSS/Atom
-  lib/sanitize.js      limpieza del HTML remoto
-  lib/feedService.js   caché de 55 s y actualización concurrente
-  api.js               rutas /api/news y /api/health
-  index.js             servidor Express de producción
-  vitePlugin.js        middleware de la API para Vite
-tests/                 pruebas unitarias de utilidades y saneado
+  index.js             servidor Express con proxy /feed/<id>
+  vitePlugin.js        proxy /feed/<id> para Vite
+vercel.json            rewrites /feed/<id> hacia cada fuente
+tests/                 pruebas de utilidades, parseo, saneado y configuración
 ```
 
-### API
+### Carga de feeds
 
-- `GET /api/news`: instantánea completa (feeds y artículos). Acepta `?force=1` para
-  forzar una actualización, con un límite de una petición forzada cada 5 segundos.
-- `GET /api/health`: estado de la caché, número de artículos y errores por feed.
+El navegador pide las fuentes a `/feed/<id>`, las parsea con `DOMParser` y guarda una
+instantánea en memoria durante 55 segundos. Si una descarga falla, conserva los
+últimos artículos de ese feed. El cliente refresca cada 60 segundos y también al
+recuperar el foco de la pestaña.
 
-El servidor cachea los feeds 55 segundos y conserva las últimas noticias de un feed si
-su descarga falla. El cliente consulta la API cada 60 segundos y también al recuperar
-el foco de la pestaña.
+Vite (desarrollo) y Express (producción local) reenvían `/feed/<id>` a la URL real.
+En Vercel lo hacen los rewrites de `vercel.json`. No hay caché ni parseo en el servidor.
 
 ### Feeds
 
-Las fuentes se definen en `server/config/feeds.js`: Xataka, ADSLZone, Genbeta,
-eldia.es, MuyLinux, BandaAncha, El Español y Diario de Avisos. Para añadir una fuente
-basta con incluir una entrada con `id`, `name`, `url`, `siteUrl`, `icon` y `color`, y
-colocar su icono en `public/feeds/`.
+Las fuentes se definen en `src/config/feeds.js`: Xataka, ADSLZone, Genbeta, eldia.es,
+MuyLinux, BandaAncha, El Español y Diario de Avisos. Para añadir una fuente hay que
+incluir una entrada con `id`, `name`, `url`, `siteUrl`, `icon` y `color`, colocar su
+icono en `public/feeds/` y añadir el rewrite correspondiente en `vercel.json`. El test
+`tests/feeds.test.js` falla si ambos sitios dejan de estar sincronizados.
 
 ### Estado local
 
@@ -154,5 +154,9 @@ colocar su icono en `public/feeds/`.
   mantiene visible la noticia seleccionada hasta cambiar de selección.
 - Añadidos tests, comprobación del límite de 400 líneas por archivo, CI, Dependabot
   diario y flujo automático de actualización de Node.js LTS.
-- Soporte de despliegue en Vercel mediante funciones serverless (`/api/news` y
-  `/api/health`) que comparten el enrutador con Express.
+- Carga de feeds trasladada al navegador: `DOMParser` para RSS/Atom, saneado con
+  `sanitize-html` en el cliente y caché de 55 s en memoria. Se elimina `/api/news`.
+- En local, Vite y Express exponen `/feed/<id>` como proxy; en Vercel lo resuelven
+  rewrites same-origin, sin funciones serverless.
+- Añadidos tests de parseo RSS/Atom y de sincronización entre `feeds.js` y
+  `vercel.json`.

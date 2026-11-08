@@ -1,14 +1,18 @@
 /**
  * Fuentes RSS importadas desde QuiteRSS.
  * El orden es el que se muestra en la barra lateral.
+ *
+ * `endpoint` es la ruta same-origin que usa el navegador. En Vercel se resuelve
+ * con los rewrites de `vercel.json`; en local, con el proxy de Vite o Express.
+ * Los iconos son relativos para funcionar también bajo un subdirectorio.
  */
-export const FEEDS = [
+const SOURCES = [
   {
     id: 'xataka',
     name: 'Xataka',
     url: 'https://www.xataka.com/feedburner.xml',
     siteUrl: 'https://www.xataka.com',
-    icon: '/feeds/xataka.png',
+    icon: 'feeds/xataka.png',
     color: '#e94b35',
   },
   {
@@ -16,7 +20,7 @@ export const FEEDS = [
     name: 'ADSLZone',
     url: 'https://feeds.feedburner.com/adslzone/adslzone',
     siteUrl: 'https://www.adslzone.net',
-    icon: '/feeds/adslzone.png',
+    icon: 'feeds/adslzone.png',
     color: '#1b74c9',
   },
   {
@@ -24,7 +28,7 @@ export const FEEDS = [
     name: 'Genbeta',
     url: 'https://www.genbeta.com/feedburner.xml',
     siteUrl: 'https://www.genbeta.com',
-    icon: '/feeds/genbeta.png',
+    icon: 'feeds/genbeta.png',
     color: '#3a7f3f',
   },
   {
@@ -32,7 +36,7 @@ export const FEEDS = [
     name: 'eldia.es - General',
     url: 'https://www.eldia.es/rss/',
     siteUrl: 'https://www.eldia.es',
-    icon: '/feeds/eldia.png',
+    icon: 'feeds/eldia.png',
     color: '#0b5fa5',
   },
   {
@@ -40,7 +44,7 @@ export const FEEDS = [
     name: 'MuyLinux',
     url: 'https://www.muylinux.com/feed/',
     siteUrl: 'https://www.muylinux.com',
-    icon: '/feeds/muylinux.png',
+    icon: 'feeds/muylinux.png',
     color: '#2d7d46',
   },
   {
@@ -48,7 +52,7 @@ export const FEEDS = [
     name: 'BandaAncha: Noticias y guías sobre fibra y móvil',
     url: 'https://bandaancha.eu/articulos.rss',
     siteUrl: 'https://bandaancha.eu/articulos',
-    icon: '/feeds/bandaancha.png',
+    icon: 'feeds/bandaancha.png',
     color: '#e58b2a',
   },
   {
@@ -56,7 +60,7 @@ export const FEEDS = [
     name: 'El Español - Home',
     url: 'https://www.elespanol.com/rss/',
     siteUrl: 'https://www.elespanol.com',
-    icon: '/feeds/elespanol.png',
+    icon: 'feeds/elespanol.png',
     color: '#c8102e',
   },
   {
@@ -64,9 +68,14 @@ export const FEEDS = [
     name: 'Diario de Avisos (todo)',
     url: 'https://diariodeavisos.elespanol.com/feed/',
     siteUrl: 'https://diariodeavisos.elespanol.com',
-    icon: '/feeds/diariodeavisos.png',
+    icon: 'feeds/diariodeavisos.png',
     color: '#e30613',
   },
 ];
+
+export const FEEDS = SOURCES.map((feed) => ({
+  ...feed,
+  endpoint: `/feed/${feed.id}`,
+}));
 
 export const FEED_BY_ID = new Map(FEEDS.map((feed) => [feed.id, feed]));

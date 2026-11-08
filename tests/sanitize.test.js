@@ -5,7 +5,7 @@ import {
   extractFirstImage,
   htmlToText,
   sanitizeArticleHtml,
-} from '../server/lib/sanitize.js';
+} from '../src/utils/sanitize.js';
 
 describe('sanitizeArticleHtml', () => {
   it('elimina scripts, estilos y atributos peligrosos', () => {

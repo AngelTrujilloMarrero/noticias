@@ -10,7 +10,7 @@ export function useFeedData() {
   const [error, setError] = useState('');
   const [nextRefreshAt, setNextRefreshAt] = useState(() => Date.now() + CLIENT_REFRESH_MS);
 
-  const controllerRef = useRef(null);
+  const requestRef = useRef(0);
   const nextRefreshRef = useRef(nextRefreshAt);
 
   useEffect(() => {
@@ -18,25 +18,23 @@ export function useFeedData() {
   }, [nextRefreshAt]);
 
   const load = useCallback(async ({ force = false, background = false } = {}) => {
-    controllerRef.current?.abort();
-    const controller = new AbortController();
-    controllerRef.current = controller;
+    const requestId = requestRef.current + 1;
+    requestRef.current = requestId;
 
     if (background) setRefreshing(true);
     else setLoading(true);
     setError('');
 
     try {
-      const nextSnapshot = await fetchNews({ signal: controller.signal, force });
+      const nextSnapshot = await fetchNews({ force });
+      if (requestRef.current !== requestId) return;
       setSnapshot(nextSnapshot);
       setNextRefreshAt(Date.now() + CLIENT_REFRESH_MS);
     } catch (caught) {
-      if (caught?.name !== 'AbortError') {
-        setError(caught?.message || 'No se pudieron cargar las noticias');
-      }
+      if (requestRef.current !== requestId) return;
+      setError(caught?.message || 'No se pudieron cargar las noticias');
     } finally {
-      if (controllerRef.current === controller) {
-        controllerRef.current = null;
+      if (requestRef.current === requestId) {
         setLoading(false);
         setRefreshing(false);
       }
@@ -67,8 +65,7 @@ export function useFeedData() {
   const refresh = useCallback(() => load({ force: true }), [load]);
 
   const stop = useCallback(() => {
-    controllerRef.current?.abort();
-    controllerRef.current = null;
+    requestRef.current += 1;
     setLoading(false);
     setRefreshing(false);
   }, []);

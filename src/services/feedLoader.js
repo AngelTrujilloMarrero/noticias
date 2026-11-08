@@ -1,13 +1,11 @@
 import { FEEDS } from '../config/feeds.js';
-import { fetchText } from './http.js';
 import { parseFeedXml } from './parseFeed.js';
 
-const REFRESH_MS = Math.max(15_000, Number(process.env.FEED_REFRESH_MS) || 55_000);
+const REFRESH_MS = 55_000;
 const FORCE_THROTTLE_MS = 5_000;
+const FETCH_TIMEOUT_MS = 20_000;
 const MAX_ARTICLES = 600;
-const FETCH_TIMEOUT_MS = 15_000;
 
-/** @type {Map<string, {articles: any[], fetchedAt: string, error: string}>} */
 const cache = new Map();
 let snapshot = createEmptySnapshot();
 let inflight = null;
@@ -74,22 +72,37 @@ function rebuildSnapshot() {
 }
 
 async function loadFeed(feed) {
-  const xml = await fetchText(feed.url, { timeoutMs: FETCH_TIMEOUT_MS });
-  return parseFeedXml(xml, feed, { fetchedAt: new Date().toISOString() });
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(feed.endpoint, {
+      signal: controller.signal,
+      cache: 'no-store',
+      headers: {
+        Accept: 'application/rss+xml, application/atom+xml, application/xml, text/xml, */*',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status} ${response.statusText}`.trim());
+    }
+
+    return parseFeedXml(await response.text(), feed, {
+      fetchedAt: new Date().toISOString(),
+    });
+  } catch (error) {
+    if (controller.signal.aborted) {
+      throw new Error('Tiempo de espera agotado', { cause: error });
+    }
+    throw error;
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
-/**
- * Actualiza todos los feeds. Si uno falla se conservan sus últimas noticias.
- * Solo se permite una actualización simultánea.
- */
-export function refreshFeeds({ force = false } = {}) {
+function refreshFeeds() {
   if (inflight) return inflight;
-
-  const age = Date.now() - lastAttemptAt;
-  if (!force && lastAttemptAt && age < REFRESH_MS) {
-    return Promise.resolve(snapshot);
-  }
-
   lastAttemptAt = Date.now();
 
   inflight = (async () => {
@@ -122,6 +135,10 @@ export function refreshFeeds({ force = false } = {}) {
   return inflight;
 }
 
+/**
+ * Descarga los feeds en el navegador a través de `/feed/<id>` y construye una
+ * instantánea con la misma forma que consumía la antigua API.
+ */
 export async function getNews({ force = false } = {}) {
   if (inflight) return inflight;
 
@@ -129,27 +146,15 @@ export async function getNews({ force = false } = {}) {
   const needsRefresh = cache.size === 0 || age >= REFRESH_MS;
   const canForce = force && age >= FORCE_THROTTLE_MS;
 
-  if (needsRefresh || canForce) {
-    return refreshFeeds({ force: canForce });
+  if (!needsRefresh && !canForce) return snapshot;
+
+  const result = await refreshFeeds();
+  if (result.stats.articleCount === 0 && result.stats.errorCount === FEEDS.length) {
+    const detail = result.feeds.find((feed) => feed.error)?.error;
+    throw new Error(detail || 'No se pudieron cargar los feeds');
   }
 
-  return snapshot;
+  return result;
 }
 
-export function getSnapshot() {
-  return snapshot;
-}
-
-export function getStatus() {
-  return {
-    ok: true,
-    cacheSize: cache.size,
-    updatedAt: snapshot.updatedAt,
-    lastAttemptAt: snapshot.lastAttemptAt,
-    articleCount: snapshot.stats.articleCount,
-    errorCount: snapshot.stats.errorCount,
-    refreshIntervalMs: REFRESH_MS,
-  };
-}
-
-export const __testing = { REFRESH_MS, MAX_ARTICLES };
+export const __testing = { REFRESH_MS, MAX_ARTICLES, createEmptySnapshot };

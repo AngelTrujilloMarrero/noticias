@@ -3,9 +3,38 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "functions": {
-    "api/*.js": {
-      "maxDuration": 60
+  "rewrites": [
+    {
+      "source": "/feed/xataka",
+      "destination": "https://www.xataka.com/feedburner.xml"
+    },
+    {
+      "source": "/feed/adslzone",
+      "destination": "https://feeds.feedburner.com/adslzone/adslzone"
+    },
+    {
+      "source": "/feed/genbeta",
+      "destination": "https://www.genbeta.com/feedburner.xml"
+    },
+    {
+      "source": "/feed/eldia",
+      "destination": "https://www.eldia.es/rss/"
+    },
+    {
+      "source": "/feed/muylinux",
+      "destination": "https://www.muylinux.com/feed/"
+    },
+    {
+      "source": "/feed/bandaancha",
+      "destination": "https://bandaancha.eu/articulos.rss"
+    },
+    {
+      "source": "/feed/elespanol",
+      "destination": "https://www.elespanol.com/rss/"
+    },
+    {
+      "source": "/feed/diariodeavisos",
+      "destination": "https://diariodeavisos.elespanol.com/feed/"
     }
-  }
+  ]
 }
