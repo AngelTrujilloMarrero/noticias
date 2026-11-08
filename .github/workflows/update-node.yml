@@ -1,0 +1,48 @@
+name: Actualizar Node.js LTS
+
+on:
+  schedule:
+    # 03:00 UTC: madrugada en España (04:00/05:00 según horario de verano).
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  actualizar:
+    name: Buscar nueva LTS y abrir PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v5
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+
+      - name: Actualizar .nvmrc, engines y README
+        run: node scripts/update-node-version.mjs
+
+      - name: Abrir pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: chore/node-lts
+          delete-branch: true
+          title: 'chore: actualizar Node.js a la última LTS'
+          commit-message: 'chore: actualizar Node.js a la última LTS'
+          body: |
+            Actualización automática de la versión de Node.js.
+
+            Este flujo consulta la última versión LTS publicada por Node.js y
+            actualiza `.nvmrc`, el campo `engines.node` de `package.json` y
+            `package-lock.json`, y la versión indicada en el README.
+
+            Dependabot no admite `.nvmrc`, por eso este flujo complementa sus
+            actualizaciones diarias.
+          labels: |
+            dependencias
+            node

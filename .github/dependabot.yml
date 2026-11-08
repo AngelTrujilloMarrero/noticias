@@ -1,0 +1,40 @@
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: '/'
+    schedule:
+      interval: daily
+      time: '04:00'
+      timezone: Europe/Madrid
+    target-branch: main
+    open-pull-requests-limit: 5
+    labels:
+      - dependencias
+    groups:
+      produccion:
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+      desarrollo:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+    commit-message:
+      prefix: 'chore(deps)'
+
+  - package-ecosystem: github-actions
+    directory: '/'
+    schedule:
+      interval: daily
+      time: '04:00'
+      timezone: Europe/Madrid
+    target-branch: main
+    open-pull-requests-limit: 5
+    labels:
+      - dependencias
+      - github-actions
+    commit-message:
+      prefix: 'chore(actions)'

@@ -1,0 +1,104 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --accent: #0066cc;
+  --selection: #308cc6;
+  --chrome: #efefef;
+  --sidebar-bg: #f9fff9;
+  --border-dark: #9f9f9f;
+  --border-soft: #c0c0c0;
+  --text: #1d1d1d;
+  --muted: #666;
+  --focus: #0066cc;
+  color-scheme: light;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #e5e5e5;
+  color: var(--text);
+  font-family: Ubuntu, 'Noto Sans', 'DejaVu Sans', Cantarell, sans-serif;
+  font-size: 12.5px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: var(--accent);
+}
+
+img {
+  display: block;
+}
+
+::selection {
+  background: var(--selection);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 1px solid var(--focus);
+  outline-offset: -1px;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #bcbcbc #f2f2f2;
+}
+
+*::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #f2f2f2;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #bcbcbc;
+  border: 3px solid #f2f2f2;
+  border-radius: 7px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #9b9b9b;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin {
+  display: inline-flex;
+  animation: spin 1s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spin {
+    animation: none;
+  }
+}

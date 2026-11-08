@@ -1,0 +1,17 @@
+/* Panel del artículo */
+.article-panel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  background: #fff;
+}
+
+.article-frame {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  background: #fff;
+  border: 0;
+}
