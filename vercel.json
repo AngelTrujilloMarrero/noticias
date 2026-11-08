@@ -38,7 +38,7 @@
     },
     {
       "source": "/feed/midudev",
-      "destination": "https://midudev.substack.com/feed"
+      "destination": "https://fxtwitter.com/midudev/feed.xml"
     }
   ]
 }

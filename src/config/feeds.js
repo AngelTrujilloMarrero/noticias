@@ -78,11 +78,12 @@ const SOURCES = [
   },
   {
     id: 'midudev',
-    name: 'midudev (Substack)',
-    url: 'https://midudev.substack.com/feed',
-    siteUrl: 'https://midudev.substack.com',
+    name: 'midudev (X)',
+    url: 'https://fxtwitter.com/midudev/feed.xml',
+    siteUrl: 'https://x.com/midudev',
     icon: 'feeds/midudev.png',
-    color: '#ff6719',
+    color: '#1da1f2',
+    direct: true,
   },
 ];
 
