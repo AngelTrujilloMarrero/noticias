@@ -5,6 +5,7 @@ import {
   buildCategoryCounts,
   buildFeedCounts,
   countUnread,
+  excludeReadArticles,
   filterArticles,
   normalizeText,
 } from '../src/utils/filters.js';
@@ -88,6 +89,19 @@ describe('filterArticles', () => {
       'alpine',
     );
     assert.deepEqual(result.map((article) => article.id), ['a1']);
+  });
+});
+
+describe('excludeReadArticles', () => {
+  it('oculta las leídas pero conserva la noticia seleccionada', () => {
+    assert.deepEqual(
+      excludeReadArticles(articles, readA1).map((article) => article.id),
+      ['a2', 'a3'],
+    );
+    assert.deepEqual(
+      excludeReadArticles(articles, readA1, 'a1').map((article) => article.id),
+      ['a1', 'a2', 'a3'],
+    );
   });
 });
 

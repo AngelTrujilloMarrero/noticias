@@ -16,6 +16,8 @@ La referencia visual del proyecto es [`docs/quiterss.png`](docs/quiterss.png).
 - Previsualización del artículo saneada y aislada en un iframe sin scripts.
 - Búsqueda sin acentos en título, resumen, autor, feed y categorías.
 - Marcado de leídas y destacadas guardado en `localStorage`.
+- Opción persistente «Ocultar leídas» para que las noticias ya leídas dejen de aparecer
+  en todas las vistas salvo «Destacados».
 - Actualización manual y automática cada 60 segundos con cuenta atrás visible.
 - Barras divisorias arrastrables (ancho del panel y altura de la lista).
 - Atajos de teclado: `↑`/`↓` para moverse, `Enter` para abrir la noticia original.
@@ -105,6 +107,7 @@ colocar su icono en `public/feeds/`.
 | `noticias:vista` | Vista activa (todo, no leídas, destacadas, feed o categoría). |
 | `noticias:leidas` | Identificadores de noticias leídas. |
 | `noticias:destacadas` | Identificadores de noticias destacadas. |
+| `noticias:ocultar-leidas` | Si está activo, las noticias leídas no se muestran. |
 | `noticias:disposicion` | Ancho del panel, altura de la lista y visibilidad del sidebar. |
 
 ## Mantenimiento automatizado
@@ -128,5 +131,8 @@ colocar su icono en `public/feeds/`.
   30 px, filas de 21 px, selección `#308cc6`, tabla con cabecera fija y
   previsualización inferior con el contenido original del artículo.
 - Estado de lectura, destacados y disposición persistidos en `localStorage`.
+- Añadido el conmutador «Ocultar leídas» (icono de ojo), persistido en
+  `noticias:ocultar-leidas`; se aplica a todas las vistas menos «Destacados» y
+  mantiene visible la noticia seleccionada hasta cambiar de selección.
 - Añadidos tests, comprobación del límite de 400 líneas por archivo, CI, Dependabot
   diario y flujo automático de actualización de Node.js LTS.

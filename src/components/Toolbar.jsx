@@ -4,6 +4,8 @@ import {
   Circle,
   CircleCheck,
   ExternalLink,
+  Eye,
+  EyeOff,
   Home,
   LoaderCircle,
   PanelLeftClose,
@@ -30,6 +32,8 @@ export function Toolbar({
   hasSelection,
   isStarred,
   isRead,
+  hideRead,
+  onToggleHideRead,
   onToggleStar,
   onToggleRead,
   onOpenOriginal,
@@ -67,6 +71,13 @@ export function Toolbar({
           disabled={!hasSelection}
         >
           {isRead ? <Circle size={15} /> : <CircleCheck size={15} />}
+        </IconButton>
+        <IconButton
+          label={hideRead ? 'Mostrar también las leídas' : 'Ocultar noticias leídas'}
+          onClick={onToggleHideRead}
+          active={hideRead}
+        >
+          {hideRead ? <EyeOff size={15} /> : <Eye size={15} />}
         </IconButton>
         <IconButton
           label={isStarred ? 'Quitar de destacadas' : 'Destacar noticia'}

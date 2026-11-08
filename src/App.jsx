@@ -14,6 +14,7 @@ import {
   buildCategoryCounts,
   buildFeedCounts,
   countUnread,
+  excludeReadArticles,
   filterArticles,
 } from './utils/filters.js';
 
@@ -50,6 +51,7 @@ export default function App() {
   const { snapshot, loading, refreshing, error, refresh, stop, nextRefreshAt } = useFeedData();
   const [storedView, setView] = usePersistentState('noticias:vista', ALL_VIEW);
   const [layout, setLayout] = usePersistentState('noticias:disposicion', DEFAULT_LAYOUT);
+  const [hideRead, setHideRead] = usePersistentState('noticias:ocultar-leidas', false);
   const [query, setQuery] = useState('');
   const [selectedId, setSelectedId] = useState(null);
   const { readIds, starredIds, markRead, toggleRead, toggleStar } = useArticleState();
@@ -78,10 +80,15 @@ export default function App() {
     () => buildCategoryCounts(enrichedArticles).slice(0, 14),
     [enrichedArticles],
   );
-  const filtered = useMemo(
-    () => filterArticles(enrichedArticles, view, readIds, starredIds, query),
-    [enrichedArticles, view, readIds, starredIds, query],
-  );
+  const filtered = useMemo(() => {
+    const result = filterArticles(enrichedArticles, view, readIds, starredIds, query);
+    if (!hideRead || view.type === 'starred') return result;
+    return excludeReadArticles(
+      result,
+      readIds,
+      result.some((article) => article.id === selectedId) ? selectedId : null,
+    );
+  }, [enrichedArticles, view, readIds, starredIds, query, hideRead, selectedId]);
 
   const selectedIndex = filtered.findIndex((article) => article.id === selectedId);
   const selectedArticle = selectedIndex >= 0 ? filtered[selectedIndex] : null;
@@ -248,6 +255,8 @@ export default function App() {
         hasSelection={Boolean(selectedArticle)}
         isStarred={selectedArticle ? starredIds.has(selectedArticle.id) : false}
         isRead={selectedArticle ? readIds.has(selectedArticle.id) : false}
+        hideRead={hideRead}
+        onToggleHideRead={() => setHideRead((previous) => !previous)}
         onToggleStar={toggleSelectedStar}
         onToggleRead={toggleSelectedRead}
         onOpenOriginal={openSelected}

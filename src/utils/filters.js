@@ -39,6 +39,10 @@ export function filterArticles(articles, view, readIds, starredIds, query = '') 
   return result;
 }
 
+export function excludeReadArticles(articles, readIds, keepId = null) {
+  return articles.filter((article) => article.id === keepId || !readIds.has(article.id));
+}
+
 export function buildFeedCounts(articles, readIds) {
   const counts = new Map();
   for (const article of articles) {
