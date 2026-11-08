@@ -100,12 +100,14 @@
 
 .news-category {
   font-size: 11px;
-  color: #416b9c;
+  font-weight: 700;
+  color: #111;
 }
 
 .news-source {
   font-size: 11px;
-  color: #4a6d93;
+  font-weight: 700;
+  color: #111;
 }
 
 .news-row.is-selected .news-author,
@@ -117,6 +119,8 @@
 
 .news-date {
   text-align: right;
+  font-weight: 700;
+  color: #111;
 }
 
 .is-muted {
