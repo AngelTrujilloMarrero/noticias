@@ -91,7 +91,6 @@ const SOURCES = [
     siteUrl: 'https://x.com/DotCSV',
     icon: 'feeds/dotcsv.png',
     color: '#1da1f2',
-    direct: true,
   },
   {
     id: 'llmmaster',
@@ -100,7 +99,6 @@ const SOURCES = [
     siteUrl: 'https://x.com/llmmaster',
     icon: 'feeds/llmmaster.png',
     color: '#1da1f2',
-    direct: true,
   },
   {
     id: 'elhacker',
