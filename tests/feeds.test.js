@@ -12,6 +12,12 @@ describe('configuración de feeds', () => {
     }
   });
 
+  it('descarga eldia directamente porque su WAF bloquea a Vercel', () => {
+    const eldia = FEEDS.find((feed) => feed.id === 'eldia');
+    assert.equal(eldia.direct, true);
+    assert.match(eldia.url, /^https:\/\/www\.eldia\.es\//);
+  });
+
   it('mantiene los rewrites de Vercel sincronizados con los feeds', () => {
     const rewrites = new Map(vercel.rewrites.map((rule) => [rule.source, rule.destination]));
 

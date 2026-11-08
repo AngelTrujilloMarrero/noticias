@@ -14,3 +14,19 @@ describe('withCacheBuster', () => {
     );
   });
 });
+
+describe('feedRequestUrl', () => {
+  const proxyFeed = { endpoint: '/feed/xataka', url: 'https://www.xataka.com/feedburner.xml' };
+  const directFeed = { ...proxyFeed, direct: true };
+
+  it('usa la ruta same-origin con anticaché para los feeds proxificados', () => {
+    assert.equal(__testing.feedRequestUrl(proxyFeed, 7), '/feed/xataka?t=7');
+  });
+
+  it('usa la URL original para los feeds con CORS', () => {
+    assert.equal(
+      __testing.feedRequestUrl(directFeed, 7),
+      'https://www.xataka.com/feedburner.xml',
+    );
+  });
+});

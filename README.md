@@ -115,6 +115,11 @@ completa como clave de caché, así que cada refresco fuerza una descarga nueva 
 de reutilizar una copia de hasta dos minutos. La CDN de cada medio sigue aplicando su
 propio `Cache-Control`, que es el límite real de frescura.
 
+`eldia.es` es la excepción: su WAF rechaza las peticiones que llegan desde el proxy de
+Vercel, pero el feed envía `Access-Control-Allow-Origin: *`. Por eso lleva `direct: true`
+en `src/config/feeds.js` y el navegador lo descarga de la URL original sin pasar por
+`/feed/<id>`. El resto de fuentes sigue usando el proxy same-origin.
+
 ### Feeds
 
 Las fuentes se definen en `src/config/feeds.js`: Xataka, ADSLZone, Genbeta, eldia.es,
@@ -165,5 +170,8 @@ icono en `public/feeds/` y añadir el rewrite correspondiente en `vercel.json`. 
   rewrites same-origin, sin funciones serverless.
 - Las peticiones a `/feed/<id>` añaden `?t=<timestamp>` para saltarse la caché del edge
   de Vercel y acercar la actualización al minuto real.
+- `eldia.es` se descarga directamente desde el navegador (`direct: true`) porque su WAF
+  devuelve 406 a los proxies de Vercel; el feed permite CORS, así que funciona sin
+  intermediarios.
 - Añadidos tests de parseo RSS/Atom y de sincronización entre `feeds.js` y
   `vercel.json`.

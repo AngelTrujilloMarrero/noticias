@@ -5,6 +5,10 @@
  * `endpoint` es la ruta same-origin que usa el navegador. En Vercel se resuelve
  * con los rewrites de `vercel.json`; en local, con el proxy de Vite o Express.
  * Los iconos son relativos para funcionar también bajo un subdirectorio.
+ *
+ * `direct: true` hace que el navegador descargue la URL original: solo vale para
+ * fuentes que envían `Access-Control-Allow-Origin`, como eldia.es, cuyo WAF
+ * bloquea las peticiones del proxy de Vercel.
  */
 const SOURCES = [
   {
@@ -38,6 +42,7 @@ const SOURCES = [
     siteUrl: 'https://www.eldia.es',
     icon: 'feeds/eldia.png',
     color: '#0b5fa5',
+    direct: true,
   },
   {
     id: 'muylinux',

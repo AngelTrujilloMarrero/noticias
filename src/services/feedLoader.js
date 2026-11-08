@@ -80,12 +80,20 @@ function withCacheBuster(endpoint, now = Date.now()) {
   return `${endpoint}${separator}t=${now}`;
 }
 
+/**
+ * Las fuentes con CORS se piden directamente para evitar proxies que su WAF
+ * rechaza. El resto pasa por `/feed/<id>` y se salta la caché del edge.
+ */
+function feedRequestUrl(feed, now = Date.now()) {
+  return feed.direct ? feed.url : withCacheBuster(feed.endpoint, now);
+}
+
 async function loadFeed(feed) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
   try {
-    const response = await fetch(withCacheBuster(feed.endpoint), {
+    const response = await fetch(feedRequestUrl(feed), {
       signal: controller.signal,
       cache: 'no-store',
       headers: {
@@ -171,4 +179,5 @@ export const __testing = {
   MAX_ARTICLES,
   createEmptySnapshot,
   withCacheBuster,
+  feedRequestUrl,
 };
