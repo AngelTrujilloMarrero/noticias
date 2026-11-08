@@ -88,7 +88,11 @@ function feedRequestUrl(feed, now = Date.now()) {
   return feed.direct ? feed.url : withCacheBuster(feed.endpoint, now);
 }
 
-async function loadFeed(feed) {
+async function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function loadFeed(feed, attempt = 0) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
@@ -109,6 +113,10 @@ async function loadFeed(feed) {
       fetchedAt: new Date().toISOString(),
     });
   } catch (error) {
+    if (attempt < 2) {
+      await sleep(1500 * (attempt + 1));
+      return loadFeed(feed, attempt + 1);
+    }
     if (controller.signal.aborted) {
       throw new Error('Tiempo de espera agotado', { cause: error });
     }
