@@ -360,7 +360,6 @@ export default function App() {
               onMarkRead={markRead}
               onToggleRead={toggleRead}
               onToggleStar={toggleStar}
-              onOpen={openLink}
               onRetry={refresh}
             />
           </div>

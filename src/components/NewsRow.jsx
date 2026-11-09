@@ -10,7 +10,6 @@ export function NewsRow({
   onMarkRead,
   onToggleRead,
   onToggleStar,
-  onOpen,
 }) {
   return (
     <div
@@ -19,10 +18,7 @@ export function NewsRow({
       aria-selected={selected}
       data-id={article.id}
       onClick={() => onSelect(article.id)}
-      onDoubleClick={() => {
-        onMarkRead?.(article.id);
-        onOpen(article.link);
-      }}
+      onDoubleClick={() => onMarkRead?.(article.id)}
       title={`${article.title} — ${article.feedName}`}
     >
       <span className="news-cell news-state" role="gridcell">

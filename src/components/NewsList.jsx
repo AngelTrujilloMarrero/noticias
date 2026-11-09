@@ -14,7 +14,6 @@ export function NewsList({
   onMarkRead,
   onToggleRead,
   onToggleStar,
-  onOpen,
   onRetry,
 }) {
   const bodyRef = useRef(null);
@@ -72,7 +71,6 @@ export function NewsList({
                 onMarkRead={onMarkRead}
                 onToggleRead={onToggleRead}
                 onToggleStar={onToggleStar}
-                onOpen={onOpen}
               />
             ))
           : null}

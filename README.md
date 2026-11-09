@@ -180,6 +180,9 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
 - El marcado como leída en el escritorio ocurre solo al abrir la noticia: doble clic en el
   titular o «Abrir noticia original» (atajo `Enter`). El clic simple solo selecciona la
   noticia para leerla en la previsualización; ya no la marca como leída automáticamente.
+- El doble clic ya no abre el enlace original: solo marca la noticia como leída. El salto al
+  artículo se hace con el botón «Abrir noticia original» de la barra de herramientas o con el
+  atajo `Enter`, que marcan como leída al abrir.
 
 ### 2026-11-08
 
