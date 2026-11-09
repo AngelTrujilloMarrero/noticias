@@ -167,9 +167,11 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
 - `.github/dependabot.yml` revisa a diario, a las 04:00 de Europa/Madrid, las
   dependencias de npm y de GitHub Actions, y abre las actualizaciones contra `main`.
 - `.github/workflows/update-node.yml` se ejecuta a diario a las 03:00 UTC (madrugada
-  en España). Consulta la última versión LTS de Node.js y abre un PR que actualiza
-  `.nvmrc`, `package.json` y el README cuando hay una versión mayor nueva. Dependabot
-  no admite `.nvmrc`, por eso este flujo lo complementa.
+  en España). Consulta la última versión LTS de Node.js y, si hay una versión mayor
+  nueva, actualiza `.nvmrc`, `package.json`, `package-lock.json` y el README y sube
+  el cambio directamente a `main` como un commit de `github-actions[bot]`. Antes de
+  publicarlo instala las dependencias y ejecuta `npm run check` con la nueva versión.
+  Dependabot no admite `.nvmrc`, por eso este flujo lo complementa.
 - `.github/workflows/ci.yml` ejecuta lint, tests, el límite de 400 líneas y el build
   en cada push y pull request dirigido a `main`.
 
@@ -177,6 +179,9 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
 
 ### 2026-11-09
 
+- Node.js actualizado a la LTS 26 (`.nvmrc`, `engines.node` y README).
+- El flujo de actualización de Node.js LTS ya no abre un pull request: valida la nueva
+  versión con `npm run check` y hace commit directo en `main` con `github-actions[bot]`.
 - El marcado como leída en el escritorio ocurre solo al abrir la noticia: doble clic en el
   titular o «Abrir noticia original» (atajo `Enter`). El clic simple solo selecciona la
   noticia para leerla en la previsualización; ya no la marca como leída automáticamente.
