@@ -8,15 +8,20 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
+
+concurrency:
+  group: update-node
+  cancel-in-progress: false
 
 jobs:
   actualizar:
-    name: Buscar nueva LTS y abrir PR
+    name: Buscar nueva LTS y actualizar main
     runs-on: ubuntu-latest
     steps:
       - name: Descargar el repositorio
         uses: actions/checkout@v5
+        with:
+          ref: main
 
       - name: Configurar Node.js
         uses: actions/setup-node@v5
@@ -27,22 +32,21 @@ jobs:
       - name: Actualizar .nvmrc, engines y README
         run: node scripts/update-node-version.mjs
 
-      - name: Abrir pull request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          branch: chore/node-lts
-          delete-branch: true
-          title: 'chore: actualizar Node.js a la última LTS'
-          commit-message: 'chore: actualizar Node.js a la última LTS'
-          body: |
-            Actualización automática de la versión de Node.js.
+      - name: Comprobar si hay cambios
+        id: cambios
+        run: |
+          if git diff --quiet; then
+            echo "hay=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "hay=true" >> "$GITHUB_OUTPUT"
+          fi
 
-            Este flujo consulta la última versión LTS publicada por Node.js y
-            actualiza `.nvmrc`, el campo `engines.node` de `package.json` y
-            `package-lock.json`, y la versión indicada en el README.
-
-            Dependabot no admite `.nvmrc`, por eso este flujo complementa sus
-            actualizaciones diarias.
-          labels: |
-            dependencias
-            node
+      - name: Crear commit y subir a main
+        if: steps.cambios.outputs.hay == 'true'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .nvmrc package.json package-lock.json README.md
+          git commit -m 'chore: actualizar Node.js a la última LTS'
+          git pull --rebase origin main
+          git push origin HEAD:main
