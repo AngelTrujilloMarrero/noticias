@@ -207,6 +207,10 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
   móviles reales, donde antes solo aparecía el resumen del feed.
 - El título de la pestaña pasa a «Noticias — AngelRSS», conservando delante el contador de
   noticias no leídas.
+- En escritorio, las flechas ↑/↓ siguen moviendo la selección aunque el foco esté dentro
+  de la previsualización del artículo. El iframe mantiene `allow-scripts` desactivado,
+  añade `allow-same-origin` solo para escuchar las teclas desde la app y refuerza el
+  contenido con una CSP que bloquea scripts, formularios y marcos.
 
 ### 2026-11-08
 

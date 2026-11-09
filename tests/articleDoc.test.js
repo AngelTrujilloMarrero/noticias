@@ -26,6 +26,19 @@ describe('buildArticleDocument', () => {
     assert.match(document, /<p>Resumen con &lt;b&gt;etiquetas&lt;\/b&gt;<\/p>/);
   });
 
+  it('incluye una CSP que bloquea scripts, formularios y marcos', () => {
+    const document = buildArticleDocument({
+      title: 'Noticia',
+      link: 'https://example.com/',
+      content: '<p>Texto</p>',
+    });
+
+    assert.match(document, /Content-Security-Policy/);
+    assert.match(document, /script-src 'none'/);
+    assert.match(document, /form-action 'none'/);
+    assert.match(document, /frame-src 'none'/);
+  });
+
   it('devuelve una cadena vacía sin artículo', () => {
     assert.equal(buildArticleDocument(null), '');
   });

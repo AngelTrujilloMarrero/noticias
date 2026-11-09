@@ -20,6 +20,7 @@ import {
   excludeReadArticles,
   filterArticles,
 } from './utils/filters.js';
+import { isTypingTarget, navigationDirection } from './utils/keyboard.js';
 
 const EMPTY_LIST = [];
 const ALL_VIEW = { type: 'all' };
@@ -212,18 +213,19 @@ export default function App() {
 
   useEffect(() => {
     function handleKeyDown(event) {
+      const direction = navigationDirection(event);
+      if (direction) {
+        event.preventDefault();
+        if (direction === 'next') goNext();
+        else goPrevious();
+        return;
+      }
+
       const target = event.target;
-      const isTyping =
-        ['INPUT', 'TEXTAREA', 'SELECT'].includes(target?.tagName) || target?.isContentEditable;
+      const isTyping = isTypingTarget(target);
       if (isTyping || event.ctrlKey || event.metaKey || event.altKey) return;
 
-      if (event.key === 'ArrowDown') {
-        event.preventDefault();
-        goNext();
-      } else if (event.key === 'ArrowUp') {
-        event.preventDefault();
-        goPrevious();
-      } else if (event.key === 'Escape') {
+      if (event.key === 'Escape') {
         setQuery('');
       } else if (event.key.toLowerCase() === 'm') {
         toggleSelectedRead();
@@ -368,7 +370,12 @@ export default function App() {
             onDrag={resizeNewsPanel}
             onReset={resetNewsPanel}
           />
-          <ArticlePane article={selectedArticle} loading={loading} />
+          <ArticlePane
+            article={selectedArticle}
+            loading={loading}
+            onPrev={goPrevious}
+            onNext={goNext}
+          />
         </main>
       </div>
 

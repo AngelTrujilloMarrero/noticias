@@ -67,6 +67,7 @@ export function buildArticleDocument(article, { mobile = false } = {}) {
 <html lang="es">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src http: https: data:; media-src http: https:; style-src 'unsafe-inline'; font-src http: https: data:; form-action 'none'; frame-src 'none'; object-src 'none'; script-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <base href="${escapeAttribute(baseUrl)}" target="_blank">
 <title>${title}</title>
