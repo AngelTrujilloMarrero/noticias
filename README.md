@@ -173,7 +173,9 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
   publicarlo instala las dependencias y ejecuta `npm run check` con la nueva versión.
   Dependabot no admite `.nvmrc`, por eso este flujo lo complementa.
 - `.github/workflows/ci.yml` ejecuta lint, tests, el límite de 400 líneas y el build
-  en cada push y pull request dirigido a `main`.
+  en cada push y pull request dirigido a `main`, salvo los pushes de
+  `github-actions[bot]`: ese token no dispara otros flujos, por eso el actualizador
+  de Node valida con `npm run check` antes de publicar.
 
 ## Cambios importantes
 
