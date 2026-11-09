@@ -24,6 +24,15 @@ function prepareContainer(container, config) {
   if (config.removeLeadImage) removeLeadImage(container);
 }
 
+function findContainer(document, config) {
+  const selectors = Array.isArray(config.container) ? config.container : [config.container];
+  for (const selector of selectors) {
+    const container = document.querySelector(selector);
+    if (container) return container;
+  }
+  return null;
+}
+
 /**
  * Extrae el HTML del artículo desde el documento de la página original.
  * Con `container` conserva todo su interior; con `selector` recoge solo esos
@@ -33,7 +42,7 @@ export function extractArticleContent(document, config, baseUrl) {
   if (!document || !config) return '';
 
   if (config.container) {
-    const container = document.querySelector(config.container);
+    const container = findContainer(document, config);
     if (!container) return '';
     prepareContainer(container, config);
     return sanitizeArticleHtml(container.innerHTML, baseUrl);

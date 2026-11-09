@@ -59,6 +59,24 @@ test('usa el contenedor configurado y elimina el ruido y la imagen de cabecera',
   assert.doesNotMatch(content, /Ruido/);
 });
 
+test('usa el contenedor alternativo cuando falta el de escritorio', () => {
+  const { document } = parseHTML(`
+    <div class="post-body entry-content">
+      <p><img src="/foto.jpg" alt=""></p>
+      <p>Texto de la plantilla móvil de Blogger.</p>
+    </div>
+  `);
+
+  const content = extractArticleContent(
+    document,
+    { container: ['.art-PostContent', '.post-body'], removeLeadImage: true },
+    'https://blog.elhacker.net/2026/11/noticia.html',
+  );
+
+  assert.match(content, /plantilla móvil de Blogger/);
+  assert.doesNotMatch(content, /foto\.jpg/);
+});
+
 test('devuelve una cadena vacía si no hay contenedor ni selector', () => {
   const { document } = parseHTML('<p>Hola</p>');
   assert.equal(extractArticleContent(document, {}, ELDIA_BASE), '');

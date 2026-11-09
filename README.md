@@ -199,6 +199,10 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
   artículo se pide por el proxy same-origin `/elespanol/<ruta>` (Vite, Express y Vercel) y
   se extrae el cuerpo `.article-body__content`, descartando resúmenes con IA, publicidad y
   bloques de noticias relacionadas.
+- El Hacker puede servirse con la plantilla de escritorio o con la móvil de Blogger según
+  el User-Agent (en Vercel el rewrite reenvía el del dispositivo). La extracción admite
+  varios contenedores (`.art-PostContent` y `.post-body`), así que el artículo completo
+  también se ve en móviles reales, donde antes solo aparecía el resumen del feed.
 
 ### 2026-11-08
 
