@@ -205,6 +205,8 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
   la plantilla móvil same-origin. La extracción admite varios contenedores
   (`.art-PostContent` y `.post-body`), así que el artículo completo también se ve en
   móviles reales, donde antes solo aparecía el resumen del feed.
+- El título de la pestaña pasa a «Noticias — AngelRSS», conservando delante el contador de
+  noticias no leídas.
 
 ### 2026-11-08
 
@@ -237,7 +239,7 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
   `mobile.css`, `mobile-article.css`, `mobile-drawer.css` y `mobile-status.css` para
   respetar el límite de 400 líneas.
 - El título de la pestaña incluye el total de noticias no leídas, por ejemplo
-  `(12) Noticias — QuiteRSS`, y se actualiza al marcar leídas o al refrescar los feeds.
+  `(12) Noticias — AngelRSS`, y se actualiza al marcar leídas o al refrescar los feeds.
 - La tabla de escritorio añade la columna «Fuente» y muestra el logo del feed en la
   celda de estado; al pulsarlo se alterna leída/no leída. El estado se representa con
   opacidad y escala de grises, con un punto de respaldo si el feed no tiene icono.

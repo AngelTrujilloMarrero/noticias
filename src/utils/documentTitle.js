@@ -1,4 +1,4 @@
-const BASE_TITLE = 'Noticias — QuiteRSS';
+const BASE_TITLE = 'Noticias — AngelRSS';
 
 /** Muestra las noticias no leídas delante del título de la pestaña. */
 export function formatTabTitle(unreadCount) {
