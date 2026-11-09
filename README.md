@@ -31,7 +31,7 @@ La referencia visual del proyecto es [`docs/quiterss.png`](docs/quiterss.png).
 
 ## Requisitos
 
-- Node.js 24 o superior (véase `.nvmrc`).
+- Node.js 26 o superior (véase `.nvmrc`).
 - npm 11 o superior.
 
 ## Puesta en marcha
