@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express from 'express';
 import { FEED_BY_ID } from '../src/config/feeds.js';
+import { proxyArticle } from './lib/articleProxy.js';
 import { fetchText } from './lib/http.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -12,6 +13,11 @@ const port = Number(process.env.PORT) || 4173;
 
 const app = express();
 app.disable('x-powered-by');
+
+app.use(async (req, res, next) => {
+  if (await proxyArticle(req, res)) return;
+  next();
+});
 
 app.get('/feed/:id', async (req, res) => {
   const feed = FEED_BY_ID.get(req.params.id);

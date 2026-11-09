@@ -195,6 +195,10 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
   directa desde el navegador (el sitio envía CORS) y, si falla, se mantiene el resumen del
   feed. La extracción se configura por fuente en `src/config/feeds.js` y es extensible a
   otras fuentes.
+- El Español también muestra el artículo completo: su página no envía CORS, así que el
+  artículo se pide por el proxy same-origin `/elespanol/<ruta>` (Vite, Express y Vercel) y
+  se extrae el cuerpo `.article-body__content`, descartando resúmenes con IA, publicidad y
+  bloques de noticias relacionadas.
 
 ### 2026-11-08
 

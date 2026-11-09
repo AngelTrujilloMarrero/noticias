@@ -75,6 +75,10 @@
     {
       "source": "/elhacker/:path*",
       "destination": "https://blog.elhacker.net/:path*"
+    },
+    {
+      "source": "/elespanol/:path*",
+      "destination": "https://www.elespanol.com/:path*"
     }
   ]
 }
