@@ -11,7 +11,12 @@ function articleRequestUrl(article, config) {
 
   try {
     const url = new URL(article.link);
-    return `${config.proxy}${url.pathname}${url.search}`;
+    const params = new URLSearchParams(url.search);
+    for (const [name, value] of Object.entries(config.params || {})) {
+      params.set(name, value);
+    }
+    const query = params.toString();
+    return `${config.proxy}${url.pathname}${query ? `?${query}` : ''}`;
   } catch {
     return '';
   }
@@ -86,3 +91,5 @@ export async function fetchFullArticle(article, { domParser = globalThis.DOMPars
 
   throw lastError;
 }
+
+export const __testing = { articleRequestUrl };

@@ -12,9 +12,9 @@
  *
  * `article` activa la carga del artículo completo desde su página original.
  * `direct` lo descarga el navegador (la web debe enviar CORS), `proxy` usa una
- * ruta same-origin, `container` toma el HTML de un contenedor (o del primero
- * que exista si es una lista) y `selector` recoge elementos concretos
- * descartando los que estén dentro de `exclude`.
+ * ruta same-origin, `params` añade parámetros a la petición, `container` toma el
+ * HTML de un contenedor (o del primero que exista si es una lista) y `selector`
+ * recoge elementos concretos descartando los que estén dentro de `exclude`.
  */
 const SOURCES = [
   {
@@ -144,6 +144,7 @@ const SOURCES = [
     color: '#ff8c00',
     article: {
       proxy: '/elhacker',
+      params: { m: '1' },
       container: ['.art-PostContent', '.post-body'],
       removeLeadImage: true,
     },

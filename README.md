@@ -200,9 +200,11 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
   se extrae el cuerpo `.article-body__content`, descartando resúmenes con IA, publicidad y
   bloques de noticias relacionadas.
 - El Hacker puede servirse con la plantilla de escritorio o con la móvil de Blogger según
-  el User-Agent (en Vercel el rewrite reenvía el del dispositivo). La extracción admite
-  varios contenedores (`.art-PostContent` y `.post-body`), así que el artículo completo
-  también se ve en móviles reales, donde antes solo aparecía el resumen del feed.
+  el User-Agent. Con UA móvil, Blogger redirigía a `blog.elhacker.net?m=1`, un salto
+  cross-origin que el navegador bloquea por CORS; por eso el proxy añade `?m=1` y recibe
+  la plantilla móvil same-origin. La extracción admite varios contenedores
+  (`.art-PostContent` y `.post-body`), así que el artículo completo también se ve en
+  móviles reales, donde antes solo aparecía el resumen del feed.
 
 ### 2026-11-08
 

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { parseHTML } from 'linkedom';
-import { extractArticleContent } from '../src/services/articleLoader.js';
+import { extractArticleContent, __testing } from '../src/services/articleLoader.js';
 
 const ELDIA_BASE = 'https://www.eldia.es/islas/2026/11/09/noticia.html';
 
@@ -75,6 +75,24 @@ test('usa el contenedor alternativo cuando falta el de escritorio', () => {
 
   assert.match(content, /plantilla móvil de Blogger/);
   assert.doesNotMatch(content, /foto\.jpg/);
+});
+
+test('añade los parámetros configurados a la petición del proxy', () => {
+  const config = { proxy: '/elhacker', params: { m: '1' } };
+  assert.equal(
+    __testing.articleRequestUrl(
+      { link: 'https://blog.elhacker.net/2026/11/noticia.html' },
+      config,
+    ),
+    '/elhacker/2026/11/noticia.html?m=1',
+  );
+  assert.equal(
+    __testing.articleRequestUrl(
+      { link: 'https://blog.elhacker.net/2026/11/noticia.html?a=1' },
+      config,
+    ),
+    '/elhacker/2026/11/noticia.html?a=1&m=1',
+  );
 });
 
 test('devuelve una cadena vacía si no hay contenedor ni selector', () => {
