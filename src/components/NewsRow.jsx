@@ -19,7 +19,10 @@ export function NewsRow({
       aria-selected={selected}
       data-id={article.id}
       onClick={() => onSelect(article.id)}
-      onDoubleClick={() => onOpen(article.link)}
+      onDoubleClick={() => {
+        onMarkRead?.(article.id);
+        onOpen(article.link);
+      }}
       title={`${article.title} — ${article.feedName}`}
     >
       <span className="news-cell news-state" role="gridcell">
@@ -56,7 +59,6 @@ export function NewsRow({
         onClick={(event) => {
           event.stopPropagation();
           onSelect(article.id);
-          onMarkRead?.(article.id);
         }}
       >
         {article.title}

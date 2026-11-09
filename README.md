@@ -175,6 +175,12 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
 
 ## Cambios importantes
 
+### 2026-11-09
+
+- El marcado como leída en el escritorio ocurre solo al abrir la noticia: doble clic en el
+  titular o «Abrir noticia original» (atajo `Enter`). El clic simple solo selecciona la
+  noticia para leerla en la previsualización; ya no la marca como leída automáticamente.
+
 ### 2026-11-08
 
 - Versión inicial: importación de los ocho feeds de QuiteRSS, proxy Node con caché de

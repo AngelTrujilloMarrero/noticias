@@ -60,7 +60,6 @@ export default function App() {
   const { readIds, starredIds, markRead, markManyRead, toggleRead, toggleStar } = useArticleState();
   const isMobile = useMediaQuery('(max-width: 760px)');
   const mainRef = useRef(null);
-  const previousSelectedRef = useRef(null);
 
   const view = normalizeView(storedView);
   const feeds = snapshot?.feeds ?? EMPTY_LIST;
@@ -119,12 +118,6 @@ export default function App() {
   }, [filtered, selectedId]);
 
   useEffect(() => {
-    const previous = previousSelectedRef.current;
-    if (previous && previous !== selectedId) markRead(previous);
-    previousSelectedRef.current = selectedId;
-  }, [selectedId, markRead]);
-
-  useEffect(() => {
     if (view.type === 'feed' && feeds.length > 0 && !feedMap.has(view.id)) {
       setView(ALL_VIEW);
     }
@@ -168,8 +161,11 @@ export default function App() {
   }, [selectedArticle, toggleStar]);
 
   const openSelected = useCallback(() => {
-    if (selectedArticle) openLink(selectedArticle.link);
-  }, [selectedArticle, openLink]);
+    if (selectedArticle) {
+      markRead(selectedArticle.id);
+      openLink(selectedArticle.link);
+    }
+  }, [selectedArticle, markRead, openLink]);
 
   const toggleSidebar = useCallback(() => {
     setLayout((previous) => ({ ...previous, sidebarOpen: !previous.sidebarOpen }));
