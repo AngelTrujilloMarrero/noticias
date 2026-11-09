@@ -9,6 +9,11 @@
  * `direct: true` hace que el navegador descargue la URL original: solo vale para
  * fuentes que envían `Access-Control-Allow-Origin`, como eldia.es, cuyo WAF
  * bloquea las peticiones del proxy de Vercel.
+ *
+ * `article` activa la carga del artículo completo desde su página original.
+ * `direct` lo descarga el navegador (la web debe enviar CORS), `proxy` usa una
+ * ruta same-origin, `container` toma el HTML de un contenedor y `selector`
+ * recoge elementos concretos descartando los que estén dentro de `exclude`.
  */
 const SOURCES = [
   {
@@ -43,6 +48,11 @@ const SOURCES = [
     icon: 'feeds/eldia.png',
     color: '#0b5fa5',
     direct: true,
+    article: {
+      direct: true,
+      selector: 'p.ft-text, h3.ft-helper-fontSize-heading-XS',
+      exclude: 'aside, ._mo_recs_tpi, .ft-mol-modNews, .closedContent, .subscribeHideForDisplay',
+    },
   },
   {
     id: 'muylinux',
@@ -113,6 +123,11 @@ const SOURCES = [
     siteUrl: 'https://blog.elhacker.net',
     icon: 'feeds/elhacker.png',
     color: '#ff8c00',
+    article: {
+      proxy: '/elhacker',
+      container: '.art-PostContent',
+      removeLeadImage: true,
+    },
   },
 ];
 

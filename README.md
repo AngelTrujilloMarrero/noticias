@@ -190,6 +190,11 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
 - El doble clic ya no abre el enlace original: solo marca la noticia como leída. El salto al
   artículo se hace con el botón «Abrir noticia original» de la barra de herramientas o con el
   atajo `Enter`, que marcan como leída al abrir.
+- La previsualización de eldia.es carga el artículo completo desde su página original
+  (párrafos y subtítulos), porque su RSS solo incluye el primer párrafo. La descarga es
+  directa desde el navegador (el sitio envía CORS) y, si falla, se mantiene el resumen del
+  feed. La extracción se configura por fuente en `src/config/feeds.js` y es extensible a
+  otras fuentes.
 
 ### 2026-11-08
 
