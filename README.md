@@ -179,6 +179,14 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
 
 ## Cambios importantes
 
+### 2026-11-10
+
+- Los feeds de X (midudev, DotCSV y LLM Master) apuntaban a `nitter.mizuki.st`, que ahora
+  responde con un `301` hacia `ruf.st`. Vercel devolvía ese redirect al navegador, que lo
+  seguía fuera de nuestro dominio y terminaba en un error de CORS («Failed to fetch»). Las
+  fuentes de `src/config/feeds.js` y los rewrites de `vercel.json` usan ya el dominio final
+  `ruf.st`, que responde `200` sin redirecciones.
+
 ### 2026-11-09
 
 - Node.js actualizado a la LTS 26 (`.nvmrc`, `engines.node` y README).

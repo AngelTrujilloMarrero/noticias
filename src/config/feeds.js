@@ -108,7 +108,7 @@ const SOURCES = [
   {
     id: 'midudev',
     name: 'midudev (X)',
-    url: 'https://nitter.mizuki.st/midudev/rss',
+    url: 'https://ruf.st/midudev/rss',
     siteUrl: 'https://x.com/midudev',
     icon: 'feeds/midudev.png',
     color: '#1da1f2',
@@ -118,7 +118,7 @@ const SOURCES = [
   {
     id: 'dotcsv',
     name: 'Carlos Santana (DotCSV)',
-    url: 'https://nitter.mizuki.st/DotCSV/rss',
+    url: 'https://ruf.st/DotCSV/rss',
     siteUrl: 'https://x.com/DotCSV',
     icon: 'feeds/dotcsv.png',
     color: '#1da1f2',
@@ -128,7 +128,7 @@ const SOURCES = [
   {
     id: 'llmmaster',
     name: 'LLM Master (X)',
-    url: 'https://nitter.mizuki.st/llmmaster/rss',
+    url: 'https://ruf.st/llmmaster/rss',
     siteUrl: 'https://x.com/llmmaster',
     icon: 'feeds/llmmaster.png',
     color: '#1da1f2',

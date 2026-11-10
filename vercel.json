@@ -58,15 +58,15 @@
     },
     {
       "source": "/feed/midudev",
-      "destination": "https://nitter.mizuki.st/midudev/rss"
+      "destination": "https://ruf.st/midudev/rss"
     },
     {
       "source": "/feed/dotcsv",
-      "destination": "https://nitter.mizuki.st/DotCSV/rss"
+      "destination": "https://ruf.st/DotCSV/rss"
     },
     {
       "source": "/feed/llmmaster",
-      "destination": "https://nitter.mizuki.st/llmmaster/rss"
+      "destination": "https://ruf.st/llmmaster/rss"
     },
     {
       "source": "/feed/elhacker",
