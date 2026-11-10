@@ -32,6 +32,19 @@ describe('sanitizeArticleHtml', () => {
     assert.match(result, /loading="lazy"/);
   });
 
+  it('fuerza https en las imágenes y vídeos para evitar contenido mixto', () => {
+    const result = sanitizeArticleHtml(
+      '<img src="http://example.com/a.jpg" alt="Foto">' +
+        '<video src="http://example.com/v.mp4" poster="http://example.com/p.jpg" controls></video>',
+      'https://example.com/',
+    );
+
+    assert.match(result, /src="https:\/\/example\.com\/a\.jpg"/);
+    assert.match(result, /src="https:\/\/example\.com\/v\.mp4"/);
+    assert.match(result, /poster="https:\/\/example\.com\/p\.jpg"/);
+    assert.match(result, /controls/);
+  });
+
   it('descarta enlaces con esquemas no permitidos', () => {
     const result = sanitizeArticleHtml(
       '<a href="javascript:alert(1)">Pulsa</a>',

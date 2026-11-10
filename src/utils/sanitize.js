@@ -38,6 +38,15 @@ function resolveAttributes(attribs, baseUrl, fields) {
 }
 
 /**
+ * Fuerza `https` en las imágenes y vídeos. Los feeds ancientos aún sirven medios
+ * por `http` y el navegador los bloquea como contenido mixto en una página HTTPS.
+ */
+function upgradeMediaUrl(value) {
+  if (typeof value !== 'string') return value;
+  return value.replace(/^http:\/\//i, 'https://');
+}
+
+/**
  * Limpia el HTML de un artículo y resuelve enlaces/imágenes relativos.
  * No se permite ningún script, iframe, formulario ni estilo inline.
  */
@@ -66,7 +75,7 @@ export function sanitizeArticleHtml(html, baseUrl = '') {
         return {
           tagName,
           attribs: {
-            ...(next.src ? { src: next.src } : {}),
+            ...(next.src ? { src: upgradeMediaUrl(next.src) } : {}),
             ...(next.alt ? { alt: next.alt } : { alt: '' }),
             ...(next.title ? { title: next.title } : {}),
             ...(next.width ? { width: next.width } : {}),
@@ -76,14 +85,27 @@ export function sanitizeArticleHtml(html, baseUrl = '') {
           },
         };
       },
-      video: (tagName, attribs) => ({
-        tagName,
-        attribs: resolveAttributes(attribs, baseUrl, ['src', 'poster']),
-      }),
-      source: (tagName, attribs) => ({
-        tagName,
-        attribs: resolveAttributes(attribs, baseUrl, ['src']),
-      }),
+      video: (tagName, attribs) => {
+        const next = resolveAttributes(attribs, baseUrl, ['src', 'poster']);
+        return {
+          tagName,
+          attribs: {
+            ...next,
+            ...(next.src ? { src: upgradeMediaUrl(next.src) } : {}),
+            ...(next.poster ? { poster: upgradeMediaUrl(next.poster) } : {}),
+          },
+        };
+      },
+      source: (tagName, attribs) => {
+        const next = resolveAttributes(attribs, baseUrl, ['src']);
+        return {
+          tagName,
+          attribs: {
+            ...next,
+            ...(next.src ? { src: upgradeMediaUrl(next.src) } : {}),
+          },
+        };
+      },
     },
   });
 }

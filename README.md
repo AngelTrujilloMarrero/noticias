@@ -186,6 +186,8 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
   seguía fuera de nuestro dominio y terminaba en un error de CORS («Failed to fetch»). Las
   fuentes de `src/config/feeds.js` y los rewrites de `vercel.json` usan ya el dominio final
   `ruf.st`, que responde `200` sin redirecciones.
+- Las imágenes y vídeos que llegan por `http` se suben a `https` al sanear el artículo, para
+  evitar el aviso de contenido mixto en los tweets con foto.
 
 ### 2026-11-09
 
