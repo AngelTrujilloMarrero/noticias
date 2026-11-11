@@ -10,7 +10,8 @@ La referencia visual del proyecto es [`docs/quiterss.png`](docs/quiterss.png).
 
 ## Funciones
 
-- Ocho feeds RSS importados de la instalación de QuiteRSS del autor.
+- Doce feeds RSS importados de la instalación de QuiteRSS del autor, con espejos para
+  las cuentas de X, que dependen de instancias de Nitter.
 - El navegador descarga y parsea los RSS; no hay API ni backend de datos.
 - Panel lateral con feeds, categorías, no leídas y destacadas.
 - Tabla con título, autor, categoría, fuente y fecha de publicación. El logo del feed
@@ -90,19 +91,22 @@ src/
   App.jsx              estado principal, vistas y atajos
   components/          barra de pestañas, toolbar, sidebar, lista, artículo, estado
   components/mobile/   cabecera, tarjetas, artículo, cajón y espacio de trabajo móvil
-  config/feeds.js      lista de fuentes y ruta /feed/<id>
+  config/feeds.js      lista de fuentes, espejos y ruta /feed/<id>
   hooks/               datos de feeds, estado persistente, lectura, destacados y breakpoint
   services/feedLoader.js  descarga concurrente y caché de 55 s en el navegador
+  services/feedFetcher.js descarga con failover entre los espejos de una fuente
   services/parseFeed.js   normalización de RSS/Atom con DOMParser
   services/api.js         fachada que usa el hook de datos
   utils/sanitize.js    limpieza del HTML remoto
+  utils/canonicalLink.js  enlace original de los artículos (X)
   utils/               filtros, fechas y documento HTML del artículo
   styles/              global, layout, sidebar, news, article y bloques mobile-*
 server/
   lib/http.js          descarga HTTP con timeout y user-agent
+  lib/feedProxy.js     proxy /feed/<id> con failover entre espejos
   index.js             servidor Express con proxy /feed/<id>
   vitePlugin.js        proxy /feed/<id> para Vite
-vercel.json            rewrites /feed/<id> hacia cada fuente
+vercel.json            rewrites /feed/<id> hacia cada fuente y sus espejos
 tests/                 pruebas de utilidades, parseo, saneado y configuración
 ```
 
@@ -115,6 +119,11 @@ recuperar el foco de la pestaña.
 
 Vite (desarrollo) y Express (producción local) reenvían `/feed/<id>` a la URL real.
 En Vercel lo hacen los rewrites de `vercel.json`. No hay caché ni parseo en el servidor.
+
+Una fuente con `mirrors` (las cuentas de X) se descarga por una ruta distinta por
+espejo: `/feed/midudev`, `/feed/midudev/1`… Si una falla, el navegador prueba la
+siguiente. En local el proxy de Vite y el de Express también recorren los espejos
+por su cuenta, así que una instancia caída no vacía la fuente.
 
 Cada petición añade `?t=<marca de tiempo>` a `/feed/<id>`. El edge de Vercel usa la URL
 completa como clave de caché, así que cada refresco fuerza una descarga nueva en lugar
@@ -129,10 +138,21 @@ en `src/config/feeds.js` y el navegador lo descarga de la URL original sin pasar
 ### Feeds
 
 Las fuentes se definen en `src/config/feeds.js`: Xataka, ADSLZone, Genbeta, eldia.es,
-MuyLinux, BandaAncha, El Español y Diario de Avisos. Para añadir una fuente hay que
-incluir una entrada con `id`, `name`, `url`, `siteUrl`, `icon` y `color`, colocar su
-icono en `public/feeds/` y añadir el rewrite correspondiente en `vercel.json`. El test
+MuyLinux, BandaAncha, El Español, Diario de Avisos, las tres cuentas de X (midudev,
+DotCSV y LLM Master) y El Hacker. Para añadir una fuente hay que incluir una entrada
+con `id`, `name`, `url`, `siteUrl`, `icon` y `color`, colocar su icono en
+`public/feeds/` y añadir el rewrite correspondiente en `vercel.json`. El test
 `tests/feeds.test.js` falla si ambos sitios dejan de estar sincronizados.
+
+Una fuente puede declarar `mirrors`: URL alternativas de la misma fuente. El navegador
+las prueba en orden cuando la principal falla y cada espejo tiene su propia ruta
+same-origin (`/feed/<id>/1`, `/feed/<id>/2`…), que necesita su rewrite en
+`vercel.json`. Las cuentas de X lo usan porque las instancias de Nitter caen con
+frecuencia.
+
+Con `canonical` se reconstruye el enlace de cada artículo sobre el sitio original
+(`{id}` es el identificador del estado). Las cuentas de X lo necesitan porque los
+mirrors de Nitter enlazan a su propio dominio.
 
 ### Interfaz móvil
 
@@ -178,6 +198,24 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
   de Node valida con `npm run check` antes de publicar.
 
 ## Cambios importantes
+
+### 2026-11-11
+
+- Las fuentes de X (midudev, DotCSV y LLM Master) apuntaban a `ruf.st`, que ya no
+  responde: la conexión con su servidor (el mismo de `nitter.mizuki.st`) agota el
+  tiempo de espera. En su lugar, cada fuente de X declara cuatro instancias de
+  Nitter (`nitter.ip6arpa.uk`, `nitter.mie.foundation`, `nitter.jaydenha.uk` y
+  `nitter.netbub.com`) en `src/config/feeds.js`.
+- El navegador recorre los espejos en orden cuando una fuente falla: cada uno tiene
+  su propia ruta same-origin (`/feed/midudev`, `/feed/midudev/1`…) con su rewrite en
+  `vercel.json`, así que el failover funciona igual en local y en producción. El proxy
+  de Vite y el de Express prueban también los espejos por su cuenta.
+- Se descarta la respuesta de un espejo que no es un feed (algunos Nitter devuelven
+  una página anti-bot con respuesta 200) y se respeta un presupuesto de 25 s por
+  fuente para no dejar la interfaz esperando.
+- Los enlaces de los tweets se reconstruyen sobre `x.com`: los mirrors de Nitter
+  enlazan a su propio dominio, a veces por http. La URL canónica se define con
+  `canonical` en `src/config/feeds.js` y se aplica en `src/utils/canonicalLink.js`.
 
 ### 2026-11-10
 

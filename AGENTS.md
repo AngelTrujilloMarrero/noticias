@@ -18,7 +18,9 @@ proxy local y Vercel lo resuelve con rewrites same-origin.
    (barra de pestañas, barra de herramientas, panel de feeds de 449 px, tabla de
    noticias y previsualización inferior). Evita introducir un sistema de diseño ajeno.
 5. **No rompas la actualización automática.** El navegador cachea los feeds 55 s y los
-   vuelve a pedir cada 60 s. Cualquier cambio en ese flujo debe probarse.
+   vuelve a pedir cada 60 s. Cualquier cambio en ese flujo debe probarse. Las fuentes
+   con `mirrors` recorren sus espejos cuando una falla: no cambies ese orden sin
+   probarlo.
 6. **Seguridad del contenido remoto.** El HTML de los artículos se limpia en el
    navegador con `sanitize-html` y se muestra en un iframe con `sandbox`. No elimines
    esas protecciones ni añadas `allow-scripts`.
@@ -33,14 +35,19 @@ proxy local y Vercel lo resuelve con rewrites same-origin.
   la interfaz móvil (≤ 760 px). El escritorio no usa estos componentes.
 - `src/hooks/`: datos de feeds, estado persistente, estado de lectura/destacados y
   contador del título de la pestaña.
-- `src/config/feeds.js`: lista de fuentes RSS y ruta `/feed/<id>` (único sitio para
-  añadir/quitar feeds; recuerda actualizar `vercel.json`).
-- `src/services/`: descarga concurrente, caché de 55 s y parseo RSS/Atom con `DOMParser`.
+- `src/config/feeds.js`: lista de fuentes RSS, espejos (`mirrors`), enlace canónico
+  (`canonical`) y ruta `/feed/<id>` (único sitio para añadir/quitar feeds; recuerda
+  actualizar `vercel.json`, con un rewrite por espejo).
+- `src/services/`: descarga concurrente, failover entre espejos, caché de 55 s y parseo
+  RSS/Atom con `DOMParser`.
 - `src/utils/sanitize.js`: limpieza del HTML remoto en el navegador.
+- `src/utils/canonicalLink.js`: reconstruye el enlace original de los artículos (X).
 - `src/utils/`: filtros, fechas y documento HTML del artículo.
 - `src/styles/`: `global.css`, `layout.css`, `sidebar.css`, `news.css`, `article.css` y
   los bloques móviles `mobile.css`, `mobile-article.css`, `mobile-drawer.css` y
   `mobile-status.css`.
+- `server/lib/feedProxy.js` y `server/lib/http.js`: proxy `/feed/<id>` en local, con
+  failover entre espejos.
 - `server/vitePlugin.js` y `server/index.js`: proxy `/feed/<id>` en local.
 - `vercel.json`: rewrites same-origin de `/feed/<id>` hacia cada fuente.
 - `tests/`: pruebas con el runner nativo de Node (`node --test`).

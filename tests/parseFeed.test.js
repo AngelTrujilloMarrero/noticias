@@ -103,4 +103,35 @@ describe('parseFeedXml', () => {
   it('devuelve una lista vacía para un XML sin noticias', () => {
     assert.deepEqual(parse('<rss><channel><title>Vacío</title></channel></rss>').articles, []);
   });
+
+  it('reconstruye sobre X el enlace de los mirrors de Nitter', () => {
+    const xFeed = {
+      ...feed,
+      id: 'midudev',
+      siteUrl: 'https://x.com/midudev',
+      canonical: 'https://x.com/midudev/status/{id}',
+    };
+
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+      <rss version="2.0">
+        <channel>
+          <title>Miguel Ángel Durán / @midudev</title>
+          <link>https://nitter.ip6arpa.uk/midudev</link>
+          <item>
+            <title>Tweet</title>
+            <link>http://nitter.ip6arpa.uk/midudev/status/2120539092962119856#m</link>
+            <pubDate>Wed, 11 Nov 2026 15:28:12 GMT</pubDate>
+            <description><![CDATA[<p>Texto del tweet</p>]]></description>
+          </item>
+        </channel>
+      </rss>`;
+
+    const result = parseFeedXml(xml, xFeed, { domParser: DOMParser });
+
+    assert.equal(result.feed.siteUrl, 'https://x.com/midudev');
+    assert.equal(
+      result.articles[0].link,
+      'https://x.com/midudev/status/2120539092962119856',
+    );
+  });
 });

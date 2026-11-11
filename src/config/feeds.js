@@ -15,7 +15,45 @@
  * ruta same-origin, `params` añade parámetros a la petición, `container` toma el
  * HTML de un contenedor (o del primero que exista si es una lista) y `selector`
  * recoge elementos concretos descartando los que estén dentro de `exclude`.
+ *
+ * `mirrors` son URL alternativas para la misma fuente. Si la principal falla, el
+ * navegador prueba las siguientes por orden. Cada espejo tiene su propia ruta
+ * same-origin (`/feed/<id>/1`, `/feed/<id>/2`…), así que el failover funciona
+ * igual en local y en Vercel. Hay que añadir un rewrite por espejo.
+ *
+ * `canonical` reconstruye el enlace de cada artículo sobre el sitio original
+ * (`{id}` se sustituye por el identificador del estado). Los mirrors de X
+ * enlazan a su propio dominio, a veces por http, así que sin esto se abriría
+ * una instancia de Nitter en lugar del tweet.
  */
+const X_INSTANCES = [
+  'https://nitter.ip6arpa.uk',
+  'https://nitter.mie.foundation',
+  'https://nitter.jaydenha.uk',
+  'https://nitter.netbub.com',
+];
+
+/**
+ * Crea una fuente de X a partir de su usuario. Todos los mirrors de Nitter
+ * sirven el mismo RSS, así que solo cambia el host.
+ */
+function xSource({ id, name, username, icon }) {
+  const urls = X_INSTANCES.map((origin) => `${origin}/${username}/rss`);
+
+  return {
+    id,
+    name,
+    url: urls[0],
+    mirrors: urls.slice(1),
+    siteUrl: `https://x.com/${username}`,
+    icon,
+    color: '#1da1f2',
+    maxItems: 10,
+    refreshIntervalMs: 5 * 60 * 1000,
+    canonical: `https://x.com/${username}/status/{id}`,
+  };
+}
+
 const SOURCES = [
   {
     id: 'xataka',
@@ -106,34 +144,28 @@ const SOURCES = [
     color: '#e30613',
   },
   {
-    id: 'midudev',
-    name: 'midudev (X)',
-    url: 'https://ruf.st/midudev/rss',
-    siteUrl: 'https://x.com/midudev',
-    icon: 'feeds/midudev.png',
-    color: '#1da1f2',
-    maxItems: 10,
-    refreshIntervalMs: 5 * 60 * 1000,
+    ...xSource({
+      id: 'midudev',
+      name: 'midudev (X)',
+      username: 'midudev',
+      icon: 'feeds/midudev.png',
+    }),
   },
   {
-    id: 'dotcsv',
-    name: 'Carlos Santana (DotCSV)',
-    url: 'https://ruf.st/DotCSV/rss',
-    siteUrl: 'https://x.com/DotCSV',
-    icon: 'feeds/dotcsv.png',
-    color: '#1da1f2',
-    maxItems: 10,
-    refreshIntervalMs: 5 * 60 * 1000,
+    ...xSource({
+      id: 'dotcsv',
+      name: 'Carlos Santana (DotCSV)',
+      username: 'DotCSV',
+      icon: 'feeds/dotcsv.png',
+    }),
   },
   {
-    id: 'llmmaster',
-    name: 'LLM Master (X)',
-    url: 'https://ruf.st/llmmaster/rss',
-    siteUrl: 'https://x.com/llmmaster',
-    icon: 'feeds/llmmaster.png',
-    color: '#1da1f2',
-    maxItems: 10,
-    refreshIntervalMs: 5 * 60 * 1000,
+    ...xSource({
+      id: 'llmmaster',
+      name: 'LLM Master (X)',
+      username: 'llmmaster',
+      icon: 'feeds/llmmaster.png',
+    }),
   },
   {
     id: 'elhacker',
@@ -151,9 +183,25 @@ const SOURCES = [
   },
 ];
 
+/** Todas las URL candidatas de una fuente: la principal y sus espejos. */
+export function feedUrls(feed) {
+  return [feed.url, ...(feed.mirrors || [])].filter(Boolean);
+}
+
+/**
+ * Ruta same-origin de cada URL candidata. La principal usa `/feed/<id>` y los
+ * espejos añaden el índice: `/feed/<id>/1`, `/feed/<id>/2`…
+ */
+export function feedEndpoints(feed) {
+  return feedUrls(feed).map((_, index) =>
+    index === 0 ? `/feed/${feed.id}` : `/feed/${feed.id}/${index}`,
+  );
+}
+
 export const FEEDS = SOURCES.map((feed) => ({
   ...feed,
   endpoint: `/feed/${feed.id}`,
+  endpoints: feedEndpoints(feed),
 }));
 
 export const FEED_BY_ID = new Map(FEEDS.map((feed) => [feed.id, feed]));

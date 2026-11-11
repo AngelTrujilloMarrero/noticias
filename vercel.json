@@ -58,15 +58,51 @@
     },
     {
       "source": "/feed/midudev",
-      "destination": "https://ruf.st/midudev/rss"
+      "destination": "https://nitter.ip6arpa.uk/midudev/rss"
+    },
+    {
+      "source": "/feed/midudev/1",
+      "destination": "https://nitter.mie.foundation/midudev/rss"
+    },
+    {
+      "source": "/feed/midudev/2",
+      "destination": "https://nitter.jaydenha.uk/midudev/rss"
+    },
+    {
+      "source": "/feed/midudev/3",
+      "destination": "https://nitter.netbub.com/midudev/rss"
     },
     {
       "source": "/feed/dotcsv",
-      "destination": "https://ruf.st/DotCSV/rss"
+      "destination": "https://nitter.ip6arpa.uk/DotCSV/rss"
+    },
+    {
+      "source": "/feed/dotcsv/1",
+      "destination": "https://nitter.mie.foundation/DotCSV/rss"
+    },
+    {
+      "source": "/feed/dotcsv/2",
+      "destination": "https://nitter.jaydenha.uk/DotCSV/rss"
+    },
+    {
+      "source": "/feed/dotcsv/3",
+      "destination": "https://nitter.netbub.com/DotCSV/rss"
     },
     {
       "source": "/feed/llmmaster",
-      "destination": "https://ruf.st/llmmaster/rss"
+      "destination": "https://nitter.ip6arpa.uk/llmmaster/rss"
+    },
+    {
+      "source": "/feed/llmmaster/1",
+      "destination": "https://nitter.mie.foundation/llmmaster/rss"
+    },
+    {
+      "source": "/feed/llmmaster/2",
+      "destination": "https://nitter.jaydenha.uk/llmmaster/rss"
+    },
+    {
+      "source": "/feed/llmmaster/3",
+      "destination": "https://nitter.netbub.com/llmmaster/rss"
     },
     {
       "source": "/feed/elhacker",

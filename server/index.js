@@ -2,9 +2,8 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express from 'express';
-import { FEED_BY_ID } from '../src/config/feeds.js';
 import { proxyArticle } from './lib/articleProxy.js';
-import { fetchText } from './lib/http.js';
+import { fetchFeedXml, resolveFeedRequest } from './lib/feedProxy.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.resolve(__dirname, '..', 'dist');
@@ -19,22 +18,26 @@ app.use(async (req, res, next) => {
   next();
 });
 
-app.get('/feed/:id', async (req, res) => {
-  const feed = FEED_BY_ID.get(req.params.id);
-  if (!feed) {
+async function handleFeed(req, res) {
+  const request = resolveFeedRequest(req.path);
+  if (!request?.feed) {
     res.status(404).json({ error: 'Feed no encontrado' });
     return;
   }
 
   try {
-    const xml = await fetchText(feed.url);
+    const xml = await fetchFeedXml(request.feed, { index: request.index });
     res.setHeader('Content-Type', 'application/xml; charset=utf-8');
     res.setHeader('Cache-Control', 'no-store');
     res.send(xml);
   } catch (error) {
     res.status(502).json({ error: error?.message || 'No se pudo descargar el feed' });
   }
-});
+}
+
+// `/feed/<id>` recorre los espejos; `/feed/<id>/<espejo>` descarga uno concreto.
+app.get('/feed/:id', handleFeed);
+app.get('/feed/:id/:index', handleFeed);
 
 app.use(express.static(distDir, { index: false, maxAge: '1h' }));
 

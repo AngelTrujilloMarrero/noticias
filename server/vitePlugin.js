@@ -1,6 +1,5 @@
-import { FEED_BY_ID } from '../src/config/feeds.js';
 import { proxyArticle } from './lib/articleProxy.js';
-import { fetchText } from './lib/http.js';
+import { fetchFeedXml, resolveFeedRequest } from './lib/feedProxy.js';
 
 async function articleMiddleware(req, res, next) {
   if (await proxyArticle(req, res)) return;
@@ -9,14 +8,13 @@ async function articleMiddleware(req, res, next) {
 
 async function feedMiddleware(req, res, next) {
   const url = new URL(req.originalUrl || req.url || '/', 'http://localhost');
-  const match = /^\/feed\/([\w-]+)$/.exec(url.pathname);
-  if (!match) {
+  const request = resolveFeedRequest(url.pathname);
+  if (!request) {
     next();
     return;
   }
 
-  const feed = FEED_BY_ID.get(match[1]);
-  if (!feed) {
+  if (!request.feed) {
     res.statusCode = 404;
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
     res.end(JSON.stringify({ error: 'Feed no encontrado' }));
@@ -24,7 +22,7 @@ async function feedMiddleware(req, res, next) {
   }
 
   try {
-    const xml = await fetchText(feed.url);
+    const xml = await fetchFeedXml(request.feed, { index: request.index });
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/xml; charset=utf-8');
     res.setHeader('Cache-Control', 'no-store');

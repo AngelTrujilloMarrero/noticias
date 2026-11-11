@@ -4,6 +4,7 @@ import {
   htmlToText,
   sanitizeArticleHtml,
 } from '../utils/sanitize.js';
+import { canonicalLink } from '../utils/canonicalLink.js';
 
 function directChildren(parent, name) {
   if (!parent) return [];
@@ -162,7 +163,7 @@ function buildId(feedId, item, link, published) {
 
 function normalizeItem(item, feed, isAtom, fetchedAt) {
   const title = plainText(textOf(item, ['title'])) || 'Sin título';
-  const link = extractLink(item, isAtom) || feed.siteUrl;
+  const link = canonicalLink(extractLink(item, isAtom) || feed.siteUrl, feed);
   const published = parseDate(item, fetchedAt);
   const rawContent = pickContent(item);
   const content = sanitizeArticleHtml(rawContent, link || feed.url);
@@ -204,6 +205,9 @@ function feedMetadata(root, feed, isAtom) {
     const imageElement = childByNames(scope, ['image']);
     image = textOf(imageElement, ['url']) || '';
   }
+
+  // Los mirrors de X enlazan a su propio perfil: se conserva el sitio original.
+  if (feed.canonical) siteUrl = feed.siteUrl;
 
   return { ...feed, name: title, siteUrl, image };
 }

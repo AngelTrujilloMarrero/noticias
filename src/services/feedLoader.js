@@ -1,9 +1,9 @@
 import { FEEDS } from '../config/feeds.js';
+import { fetchFeedXml } from './feedFetcher.js';
 import { parseFeedXml } from './parseFeed.js';
 
 const REFRESH_MS = 55_000;
 const FORCE_THROTTLE_MS = 5_000;
-const FETCH_TIMEOUT_MS = 20_000;
 const MAX_ARTICLES = 600;
 
 const cache = new Map();
@@ -72,58 +72,15 @@ function rebuildSnapshot() {
 }
 
 /**
- * Añade un parámetro único a la ruta para que el edge de Vercel no reutilice
- * una copia cacheada del XML. La CDN de cada medio sigue mandando.
+ * Descarga el XML de la fuente probando sus espejos en orden y lo convierte
+ * en artículos normalizados.
  */
-function withCacheBuster(endpoint, now = Date.now()) {
-  const separator = endpoint.includes('?') ? '&' : '?';
-  return `${endpoint}${separator}t=${now}`;
-}
+async function loadFeed(feed, now = Date.now()) {
+  const xml = await fetchFeedXml(feed, { now });
 
-/**
- * Las fuentes con CORS se piden directamente para evitar proxies que su WAF
- * rechaza. El resto pasa por `/feed/<id>` y se salta la caché del edge.
- */
-function feedRequestUrl(feed, now = Date.now()) {
-  return feed.direct ? feed.url : withCacheBuster(feed.endpoint, now);
-}
-
-async function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-async function loadFeed(feed, attempt = 0) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
-
-  try {
-    const response = await fetch(feedRequestUrl(feed), {
-      signal: controller.signal,
-      cache: 'no-store',
-      headers: {
-        Accept: 'application/rss+xml, application/atom+xml, application/xml, text/xml, */*',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status} ${response.statusText}`.trim());
-    }
-
-    return parseFeedXml(await response.text(), feed, {
-      fetchedAt: new Date().toISOString(),
-    });
-  } catch (error) {
-    if (attempt < 2) {
-      await sleep(1500 * (attempt + 1));
-      return loadFeed(feed, attempt + 1);
-    }
-    if (controller.signal.aborted) {
-      throw new Error('Tiempo de espera agotado', { cause: error });
-    }
-    throw error;
-  } finally {
-    clearTimeout(timer);
-  }
+  return parseFeedXml(xml, feed, {
+    fetchedAt: new Date().toISOString(),
+  });
 }
 
 function refreshFeeds() {
@@ -197,6 +154,4 @@ export const __testing = {
   REFRESH_MS,
   MAX_ARTICLES,
   createEmptySnapshot,
-  withCacheBuster,
-  feedRequestUrl,
 };
