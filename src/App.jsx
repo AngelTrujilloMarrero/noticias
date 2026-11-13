@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Inbox, Newspaper, Star, Tag } from 'lucide-react';
 import { ArticlePane } from './components/ArticlePane.jsx';
 import { FeedsSidebar } from './components/FeedsSidebar.jsx';
 import { NewsList } from './components/NewsList.jsx';
@@ -13,6 +12,7 @@ import { useColumnWidths } from './hooks/useColumnWidths.js';
 import { useFeedData } from './hooks/useFeedData.js';
 import { useMediaQuery } from './hooks/useMediaQuery.js';
 import { usePersistentState } from './hooks/usePersistentState.js';
+import { useTheme } from './hooks/useTheme.js';
 import { useUnreadTitle } from './hooks/useUnreadTitle.js';
 import {
   buildCategoryCounts,
@@ -22,34 +22,18 @@ import {
   filterArticles,
 } from './utils/filters.js';
 import { isTypingTarget, navigationDirection } from './utils/keyboard.js';
+import {
+  ALL_VIEW,
+  DEFAULT_LAYOUT,
+  getViewIcon,
+  getViewLabel,
+  normalizeView,
+} from './utils/view.js';
 
 const EMPTY_LIST = [];
-const ALL_VIEW = { type: 'all' };
-const DEFAULT_LAYOUT = { sidebarOpen: true, sidebarWidth: 449, listRatio: 0.62 };
-const VIEW_TYPES = new Set(['all', 'unread', 'starred', 'feed', 'category']);
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
-}
-
-function normalizeView(value) {
-  return value && VIEW_TYPES.has(value.type) ? value : ALL_VIEW;
-}
-
-function getViewLabel(view, feedMap) {
-  if (view.type === 'feed') return feedMap.get(view.id)?.name || 'Feed';
-  if (view.type === 'unread') return 'Sin leer';
-  if (view.type === 'starred') return 'Destacados';
-  if (view.type === 'category') return view.name;
-  return 'Todas las noticias';
-}
-
-function getViewIcon(view, feedMap) {
-  if (view.type === 'feed') return { iconSrc: feedMap.get(view.id)?.icon };
-  if (view.type === 'unread') return { icon: Inbox };
-  if (view.type === 'starred') return { icon: Star };
-  if (view.type === 'category') return { icon: Tag };
-  return { icon: Newspaper };
 }
 
 export default function App() {
@@ -63,6 +47,7 @@ export default function App() {
   const [selectedId, setSelectedId] = useState(null);
   const { readIds, starredIds, markRead, markManyRead, toggleRead, toggleStar } = useArticleState();
   const isMobile = useMediaQuery('(max-width: 760px)');
+  const [theme, toggleTheme] = useTheme();
   const mainRef = useRef(null);
 
   const view = normalizeView(storedView);
@@ -290,7 +275,7 @@ export default function App() {
   }
 
   return (
-    <div className="app">
+    <div className="app" data-theme={theme}>
       <TabBar
         label={viewLabel}
         iconSrc={viewIcon.iconSrc}
@@ -325,6 +310,8 @@ export default function App() {
         canResetColumns={hasCustomWidths}
         sidebarOpen={sidebarOpen}
         onToggleSidebar={toggleSidebar}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
 
       <div
@@ -381,6 +368,7 @@ export default function App() {
           <ArticlePane
             article={selectedArticle}
             loading={loading}
+            theme={theme}
             onPrev={goPrevious}
             onNext={goNext}
           />

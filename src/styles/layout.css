@@ -146,6 +146,13 @@
   background: #d0d0d0;
 }
 
+.toolbar-end {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
 .search-box {
   display: flex;
   flex: 0 1 230px;

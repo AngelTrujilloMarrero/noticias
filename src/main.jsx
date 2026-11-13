@@ -11,6 +11,7 @@ import './styles/mobile.css';
 import './styles/mobile-article.css';
 import './styles/mobile-drawer.css';
 import './styles/mobile-status.css';
+import './styles/dark.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

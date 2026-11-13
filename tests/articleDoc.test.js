@@ -52,4 +52,15 @@ describe('buildArticleDocument', () => {
     assert.match(document, /padding: 14px 16px 40px/);
     assert.match(document, /font-size: 16px/);
   });
+
+  it('aplica el tema oscuro cuando se solicita', () => {
+    const document = buildArticleDocument(
+      { title: 'Noticia', link: 'https://example.com/', content: '<p>Texto</p>' },
+      { dark: true },
+    );
+
+    assert.match(document, /color-scheme: dark/);
+    assert.match(document, /background: #1b1e22/);
+    assert.match(document, /a \{ color: #7cc0f5; \}/);
+  });
 });

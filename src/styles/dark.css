@@ -1,0 +1,339 @@
+/* Tema oscuro exclusivo del escritorio. El móvil conserva siempre la versión clara. */
+.app[data-theme='dark'] {
+  color-scheme: dark;
+  --accent: #6cb6ef;
+  --selection: #2e6fa5;
+  --chrome: #2a2e33;
+  --sidebar-bg: #20261f;
+  --border-dark: #454b52;
+  --border-soft: #363c42;
+  --text: #e6e8ea;
+  --muted: #9aa1a9;
+  --focus: #6cb6ef;
+  color: var(--text);
+  background: #1b1e22;
+}
+
+.app[data-theme='dark'] * {
+  scrollbar-color: #4b525a #24282d;
+}
+
+.app[data-theme='dark'] *::-webkit-scrollbar-track {
+  background: #24282d;
+}
+
+.app[data-theme='dark'] *::-webkit-scrollbar-thumb {
+  background: #4b525a;
+  border-color: #24282d;
+}
+
+.app[data-theme='dark'] *::-webkit-scrollbar-thumb:hover {
+  background: #5f6873;
+}
+
+.app[data-theme='dark'] ::selection {
+  background: var(--selection);
+  color: #fff;
+}
+
+/* Barra de pestañas */
+.app[data-theme='dark'] .tab {
+  background: #25292e;
+  border-color: var(--border-soft);
+}
+
+.app[data-theme='dark'] .tab.is-active {
+  border-top-color: #4f565e;
+}
+
+.app[data-theme='dark'] .tab-icon {
+  color: #b7bec6;
+}
+
+.app[data-theme='dark'] .tab-close {
+  color: #9aa1a9;
+}
+
+.app[data-theme='dark'] .tab-close:hover {
+  color: #fff;
+  background: #3a4047;
+}
+
+/* Barra de herramientas */
+.app[data-theme='dark'] .toolbar {
+  background: #24282d;
+  border-bottom-color: var(--border-dark);
+}
+
+.app[data-theme='dark'] .toolbar-sep {
+  background: #434950;
+}
+
+.app[data-theme='dark'] .icon-button {
+  color: #d5dade;
+}
+
+.app[data-theme='dark'] .icon-button:hover:not(:disabled) {
+  background: #2c3a46;
+  border-color: #3d5a72;
+}
+
+.app[data-theme='dark'] .icon-button:active:not(:disabled) {
+  background: #34485a;
+}
+
+.app[data-theme='dark'] .icon-button.is-active {
+  color: #ffd166;
+  background: #3a3320;
+  border-color: #6b5a2a;
+}
+
+.app[data-theme='dark'] .search-box {
+  color: #9aa1a9;
+  background: #1c1f23;
+  border-color: #4a5058;
+}
+
+.app[data-theme='dark'] .search-box:focus-within {
+  border-color: #4d87b5;
+  box-shadow: 0 0 0 1px #2c4d66;
+}
+
+.app[data-theme='dark'] .search-box input {
+  color: #e6e8ea;
+}
+
+.app[data-theme='dark'] .search-box input::placeholder {
+  color: #7f878f;
+}
+
+.app[data-theme='dark'] .search-clear {
+  color: #9aa1a9;
+}
+
+.app[data-theme='dark'] .search-clear:hover {
+  color: #fff;
+  background: #3a4047;
+}
+
+/* Zona principal */
+.app[data-theme='dark'] .main,
+.app[data-theme='dark'] .news-panel,
+.app[data-theme='dark'] .news-body {
+  background: #24282d;
+}
+
+.app[data-theme='dark'] .article-panel,
+.app[data-theme='dark'] .article-frame {
+  background: #1b1e22;
+}
+
+.app[data-theme='dark'] .splitter:hover {
+  background: #6cb6ef;
+}
+
+.app[data-theme='dark'] .column-resizer:hover::after,
+.app[data-theme='dark'] .column-resizer:focus-visible::after {
+  background: #6cb6ef;
+}
+
+.app[data-theme='dark'] .column-resizer:focus-visible {
+  outline-color: #6cb6ef;
+}
+
+/* Barra lateral de feeds */
+.app[data-theme='dark'] .sidebar {
+  background: var(--sidebar-bg);
+}
+
+.app[data-theme='dark'] .sidebar-header {
+  border-bottom-color: #343a33;
+}
+
+.app[data-theme='dark'] .sidebar-item {
+  color: #e6e8ea;
+}
+
+.app[data-theme='dark'] .sidebar-item:hover,
+.app[data-theme='dark'] .sidebar-section-title:hover {
+  background: #2b333a;
+}
+
+.app[data-theme='dark'] .sidebar-item-icon {
+  color: #8db98f;
+}
+
+.app[data-theme='dark'] .sidebar-item.is-active .sidebar-item-icon {
+  color: #fff;
+}
+
+.app[data-theme='dark'] .sidebar-item-count {
+  color: #8fc4ef;
+}
+
+.app[data-theme='dark'] .sidebar-item.is-active .sidebar-item-count {
+  color: #fff;
+}
+
+.app[data-theme='dark'] .sidebar-item-error {
+  color: #ff8f85;
+}
+
+.app[data-theme='dark'] .sidebar-item.is-active .sidebar-item-error {
+  color: #ffd6d1;
+}
+
+.app[data-theme='dark'] .sidebar-section {
+  border-top-color: #333a33;
+}
+
+.app[data-theme='dark'] .sidebar-section-title {
+  color: #d9dde1;
+}
+
+.app[data-theme='dark'] .sidebar-subtitle {
+  color: #9aa69a;
+}
+
+.app[data-theme='dark'] .sidebar-empty {
+  color: #8f978f;
+}
+
+/* Tabla de noticias */
+.app[data-theme='dark'] .news-header {
+  color: #d3d8dd;
+  background: linear-gradient(#2d3137, #262a2f);
+  border-bottom-color: var(--border-dark);
+}
+
+.app[data-theme='dark'] .news-head-cell {
+  border-right-color: #393e44;
+}
+
+.app[data-theme='dark'] .news-row {
+  color: #e6e8ea;
+  border-bottom-color: rgb(255 255 255 / 5%);
+}
+
+.app[data-theme='dark'] .news-row:hover {
+  background: #2b3743;
+}
+
+.app[data-theme='dark'] .news-row.is-selected {
+  color: #f4f6f8;
+  background: #30363d;
+}
+
+.app[data-theme='dark'] .news-title {
+  color: #eef0f2;
+}
+
+.app[data-theme='dark'] .news-title.is-read {
+  color: #a2a8ae;
+}
+
+.app[data-theme='dark'] .news-row.is-selected .news-title,
+.app[data-theme='dark'] .news-row.is-selected .news-title.is-read {
+  color: #fff;
+}
+
+.app[data-theme='dark'] .news-author,
+.app[data-theme='dark'] .news-date {
+  color: #9aa1a9;
+}
+
+.app[data-theme='dark'] .news-category,
+.app[data-theme='dark'] .news-source {
+  color: #e6e8ea;
+}
+
+.app[data-theme='dark'] .news-date {
+  color: #eef0f2;
+}
+
+.app[data-theme='dark'] .news-row.is-selected .news-author,
+.app[data-theme='dark'] .news-row.is-selected .news-category,
+.app[data-theme='dark'] .news-row.is-selected .news-source,
+.app[data-theme='dark'] .news-row.is-selected .news-date {
+  color: #f4f6f8;
+}
+
+.app[data-theme='dark'] .is-muted {
+  color: #6f767d;
+}
+
+.app[data-theme='dark'] .read-dot {
+  background: #6cb6ef;
+  border-color: #6cb6ef;
+}
+
+.app[data-theme='dark'] .feed-toggle.is-read .read-dot {
+  border-color: #6b7783;
+}
+
+.app[data-theme='dark'] .news-row.is-selected .read-dot {
+  background: #fff;
+  border-color: #fff;
+}
+
+.app[data-theme='dark'] .news-row.is-selected .feed-toggle.is-read .read-dot {
+  background: transparent;
+}
+
+.app[data-theme='dark'] .star-toggle {
+  color: #6f767d;
+}
+
+.app[data-theme='dark'] .star-toggle:hover,
+.app[data-theme='dark'] .star-toggle.is-starred {
+  color: #f2b632;
+}
+
+.app[data-theme='dark'] .news-row.is-selected .star-toggle {
+  color: #cfe3f5;
+}
+
+.app[data-theme='dark'] .news-row.is-selected .star-toggle.is-starred {
+  color: #ffd166;
+}
+
+/* Estado vacío */
+.app[data-theme='dark'] .empty-state {
+  color: #8f969d;
+}
+
+.app[data-theme='dark'] .empty-state-title {
+  color: #c8cdd2;
+}
+
+.app[data-theme='dark'] .empty-state-text {
+  color: #a0a6ad;
+}
+
+.app[data-theme='dark'] .text-button {
+  color: #8fc4ef;
+  background: #2a3138;
+  border-color: #46515b;
+}
+
+.app[data-theme='dark'] .text-button:hover {
+  background: #33404b;
+}
+
+/* Barra de estado */
+.app[data-theme='dark'] .statusbar {
+  color: #c9ced3;
+}
+
+.app[data-theme='dark'] .status-ready {
+  color: #aab1b8;
+}
+
+.app[data-theme='dark'] .status-error-icon,
+.app[data-theme='dark'] .status-error-text {
+  color: #ff8c82;
+}
+
+.app[data-theme='dark'] .status-divider {
+  background: #4a5058;
+}

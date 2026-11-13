@@ -5,7 +5,14 @@ import { buildArticleDocument } from '../utils/articleDoc.js';
 import { navigationDirection } from '../utils/keyboard.js';
 import { EmptyState } from './EmptyState.jsx';
 
-export function ArticlePane({ article, loading, variant = 'desktop', onPrev, onNext }) {
+export function ArticlePane({
+  article,
+  loading,
+  variant = 'desktop',
+  theme = 'light',
+  onPrev,
+  onNext,
+}) {
   const [fullContent, setFullContent] = useState(null);
   const frameRef = useRef(null);
   const cleanupRef = useRef(null);
@@ -77,8 +84,11 @@ export function ArticlePane({ article, loading, variant = 'desktop', onPrev, onN
   const documentHtml = useMemo(() => {
     if (!article) return '';
     const enriched = fullContent ? { ...article, content: fullContent } : article;
-    return buildArticleDocument(enriched, { mobile: variant === 'mobile' });
-  }, [article, fullContent, variant]);
+    return buildArticleDocument(enriched, {
+      mobile: variant === 'mobile',
+      dark: theme === 'dark',
+    });
+  }, [article, fullContent, variant, theme]);
 
   if (!article) {
     return (

@@ -47,6 +47,17 @@ const MOBILE_DOC_STYLE = `
   h2 { font-size: 1.2em; }
 `;
 
+const DARK_DOC_STYLE = `
+  :root { color-scheme: dark; }
+  html, body { background: #1b1e22; }
+  body { color: #e4e7ea; }
+  a { color: #7cc0f5; }
+  figcaption { color: #9aa1a9; }
+  blockquote { border-left-color: #3f5871; color: #c3c9cf; }
+  pre, code { background: #262b31; }
+  td, th { border-color: #3f454c; }
+`;
+
 function escapeAttribute(value) {
   return String(value || '')
     .replaceAll('&', '&amp;')
@@ -55,13 +66,15 @@ function escapeAttribute(value) {
     .replaceAll('>', '&gt;');
 }
 
-export function buildArticleDocument(article, { mobile = false } = {}) {
+export function buildArticleDocument(article, { mobile = false, dark = false } = {}) {
   if (!article) return '';
 
   const baseUrl = article.link || '';
   const title = escapeAttribute(article.title || 'Noticia');
   const content = article.content || `<p>${escapeAttribute(article.summary || '')}</p>`;
-  const style = mobile ? `${DEFAULT_DOC_STYLE}${MOBILE_DOC_STYLE}` : DEFAULT_DOC_STYLE;
+  const style = `${DEFAULT_DOC_STYLE}${mobile ? MOBILE_DOC_STYLE : ''}${
+    dark ? DARK_DOC_STYLE : ''
+  }`;
 
   return `<!doctype html>
 <html lang="es">

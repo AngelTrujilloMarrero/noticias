@@ -31,6 +31,9 @@ La referencia visual del proyecto es [`docs/quiterss.png`](docs/quiterss.png).
   ancho de las columnas» de la barra de herramientas borra todos los anchos. Los anchos
   se guardan en `localStorage` (`noticias:columnas`) y solo se aplican en escritorio ancho.
 - Atajos de teclado: `↑`/`↓` para moverse, `Enter` para abrir la noticia original.
+- Modo oscuro exclusivo del escritorio, activable con el botón de tema de la barra de
+  herramientas. La elección se guarda en `localStorage` y la previsualización del
+  artículo también cambia de tema; la interfaz móvil conserva siempre la versión clara.
 - Interfaz móvil propia (≤ 760 px): cabecera compacta, filtros rápidos, tarjetas con
   imagen, cajón de fuentes y artículo a pantalla completa. El escritorio conserva el
   diseño de QuiteRSS.
@@ -187,6 +190,7 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
 | `noticias:ocultar-leidas` | Si está activo, las noticias leídas no se muestran. |
 | `noticias:disposicion` | Ancho del panel, altura de la lista y visibilidad del sidebar. |
 | `noticias:columnas` | Anchos personalizados de las columnas de la tabla (solo las ajustadas a mano). |
+| `noticias:tema` | Tema visual del escritorio: `light` u `dark` (el móvil siempre usa el claro). |
 
 ## Mantenimiento automatizado
 
@@ -207,6 +211,10 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
 
 ### 2026-11-13
 
+- Modo oscuro para el escritorio: el botón de tema de la barra de herramientas alterna
+  entre claro y oscuro, la preferencia se guarda en `localStorage` (`noticias:tema`) y
+  la previsualización del artículo adapta también sus colores. La interfaz móvil
+  (≤ 760 px) mantiene siempre el tema claro.
 - Columnas de la tabla redimensionables a mano: se puede arrastrar el borde derecho de
   cada cabecera (Título, Autor, Categoría, Fuente y Publicado), ajustar con las flechas
   del teclado (8 px, 32 px con Mayús) y restablecer una columna con doble clic en su

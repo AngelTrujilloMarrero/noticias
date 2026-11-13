@@ -10,12 +10,14 @@ import {
   EyeOff,
   Home,
   LoaderCircle,
+  Moon,
   PanelLeftClose,
   PanelLeftOpen,
   RotateCw,
   Search,
   Square,
   Star,
+  Sun,
   X,
 } from 'lucide-react';
 import { IconButton } from './IconButton.jsx';
@@ -46,6 +48,8 @@ export function Toolbar({
   canResetColumns,
   sidebarOpen,
   onToggleSidebar,
+  theme,
+  onToggleTheme,
 }) {
   return (
     <div className="toolbar">
@@ -123,28 +127,38 @@ export function Toolbar({
         </IconButton>
       </div>
 
-      <label className="search-box">
-        <Search size={14} aria-hidden="true" />
-        <input
-          type="search"
-          value={query}
-          onChange={(event) => onQueryChange(event.target.value)}
-          placeholder="Buscar en noticias"
-          aria-label="Buscar en noticias"
-          spellCheck="false"
-        />
-        {query ? (
-          <button
-            type="button"
-            className="search-clear"
-            onClick={() => onQueryChange('')}
-            title="Limpiar búsqueda"
-            aria-label="Limpiar búsqueda"
-          >
-            <X size={12} />
-          </button>
-        ) : null}
-      </label>
+      <div className="toolbar-end">
+        <label className="search-box">
+          <Search size={14} aria-hidden="true" />
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => onQueryChange(event.target.value)}
+            placeholder="Buscar en noticias"
+            aria-label="Buscar en noticias"
+            spellCheck="false"
+          />
+          {query ? (
+            <button
+              type="button"
+              className="search-clear"
+              onClick={() => onQueryChange('')}
+              title="Limpiar búsqueda"
+              aria-label="Limpiar búsqueda"
+            >
+              <X size={12} />
+            </button>
+          ) : null}
+        </label>
+
+        <IconButton
+          label={theme === 'dark' ? 'Activar modo claro' : 'Activar modo oscuro'}
+          onClick={onToggleTheme}
+          active={theme === 'dark'}
+        >
+          {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+        </IconButton>
+      </div>
     </div>
   );
 }
