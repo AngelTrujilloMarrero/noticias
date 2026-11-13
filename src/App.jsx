@@ -9,6 +9,7 @@ import { TabBar } from './components/TabBar.jsx';
 import { Toolbar } from './components/Toolbar.jsx';
 import { MobileWorkspace } from './components/mobile/MobileWorkspace.jsx';
 import { useArticleState } from './hooks/useArticleState.js';
+import { useColumnWidths } from './hooks/useColumnWidths.js';
 import { useFeedData } from './hooks/useFeedData.js';
 import { useMediaQuery } from './hooks/useMediaQuery.js';
 import { usePersistentState } from './hooks/usePersistentState.js';
@@ -56,6 +57,8 @@ export default function App() {
   const [storedView, setView] = usePersistentState('noticias:vista', ALL_VIEW);
   const [layout, setLayout] = usePersistentState('noticias:disposicion', DEFAULT_LAYOUT);
   const [hideRead, setHideRead] = usePersistentState('noticias:ocultar-leidas', false);
+  const { widths: columnWidths, setColumnWidth, resetColumn, resetColumns, hasCustomWidths } =
+    useColumnWidths();
   const [query, setQuery] = useState('');
   const [selectedId, setSelectedId] = useState(null);
   const { readIds, starredIds, markRead, markManyRead, toggleRead, toggleStar } = useArticleState();
@@ -318,6 +321,8 @@ export default function App() {
         canMarkAllRead={visibleUnread > 0}
         onOpenOriginal={openSelected}
         onHome={() => selectView(ALL_VIEW)}
+        onResetColumns={resetColumns}
+        canResetColumns={hasCustomWidths}
         sidebarOpen={sidebarOpen}
         onToggleSidebar={toggleSidebar}
       />
@@ -358,6 +363,9 @@ export default function App() {
               loading={loading}
               error={error}
               hasQuery={Boolean(query.trim())}
+              columnWidths={columnWidths}
+              onColumnResize={setColumnWidth}
+              onColumnReset={resetColumn}
               onSelect={setSelectedId}
               onMarkRead={markRead}
               onToggleRead={toggleRead}

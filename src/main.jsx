@@ -5,6 +5,7 @@ import './styles/global.css';
 import './styles/layout.css';
 import './styles/sidebar.css';
 import './styles/news.css';
+import './styles/columns.css';
 import './styles/article.css';
 import './styles/mobile.css';
 import './styles/mobile-article.css';

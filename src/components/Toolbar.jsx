@@ -4,6 +4,7 @@ import {
   CheckCheck,
   Circle,
   CircleCheck,
+  Columns3,
   ExternalLink,
   Eye,
   EyeOff,
@@ -41,6 +42,8 @@ export function Toolbar({
   canMarkAllRead,
   onOpenOriginal,
   onHome,
+  onResetColumns,
+  canResetColumns,
   sidebarOpen,
   onToggleSidebar,
 }) {
@@ -105,6 +108,13 @@ export function Toolbar({
           <ExternalLink size={15} />
         </IconButton>
         <span className="toolbar-sep" />
+        <IconButton
+          label="Restablecer el ancho de las columnas"
+          onClick={onResetColumns}
+          disabled={!canResetColumns}
+        >
+          <Columns3 size={15} />
+        </IconButton>
         <IconButton
           label={sidebarOpen ? 'Ocultar panel de feeds' : 'Mostrar panel de feeds'}
           onClick={onToggleSidebar}

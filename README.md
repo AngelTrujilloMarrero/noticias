@@ -25,6 +25,11 @@ La referencia visual del proyecto es [`docs/quiterss.png`](docs/quiterss.png).
 - Actualización manual y automática cada 60 segundos con cuenta atrás visible.
 - El título de la pestaña muestra entre paréntesis el número de noticias no leídas.
 - Barras divisorias arrastrables (ancho del panel y altura de la lista).
+- Columnas de la tabla redimensionables a mano (Título, Autor, Categoría, Fuente y
+  Publicado): arrastra el borde derecho de la cabecera, usa las flechas del teclado o
+  haz doble clic en el tirador para restablecer una columna; el botón «Restablecer el
+  ancho de las columnas» de la barra de herramientas borra todos los anchos. Los anchos
+  se guardan en `localStorage` (`noticias:columnas`) y solo se aplican en escritorio ancho.
 - Atajos de teclado: `↑`/`↓` para moverse, `Enter` para abrir la noticia original.
 - Interfaz móvil propia (≤ 760 px): cabecera compacta, filtros rápidos, tarjetas con
   imagen, cajón de fuentes y artículo a pantalla completa. El escritorio conserva el
@@ -181,6 +186,7 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
 | `noticias:destacadas` | Identificadores de noticias destacadas. |
 | `noticias:ocultar-leidas` | Si está activo, las noticias leídas no se muestran. |
 | `noticias:disposicion` | Ancho del panel, altura de la lista y visibilidad del sidebar. |
+| `noticias:columnas` | Anchos personalizados de las columnas de la tabla (solo las ajustadas a mano). |
 
 ## Mantenimiento automatizado
 
@@ -198,6 +204,19 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
   de Node valida con `npm run check` antes de publicar.
 
 ## Cambios importantes
+
+### 2026-11-13
+
+- Columnas de la tabla redimensionables a mano: se puede arrastrar el borde derecho de
+  cada cabecera (Título, Autor, Categoría, Fuente y Publicado), ajustar con las flechas
+  del teclado (8 px, 32 px con Mayús) y restablecer una columna con doble clic en su
+  tirador o todas con el botón «Restablecer el ancho de las columnas» de la barra de
+  herramientas. Los anchos se persisten en `localStorage` (`noticias:columnas`) y la
+  disposición adaptable se conserva por defecto cuando no hay anchos guardados.
+- Nuevo módulo `src/utils/columns.js` con la lógica pura de anchos (columna flexible,
+  plan de variables CSS, clase de layout y límites) y el hook `src/hooks/useColumnWidths.js`.
+- `NewsHeader.jsx` extrae la cabecera con los tiradores; la tabla mantiene scroll
+  horizontal cuando el ancho mínimo supera el panel.
 
 ### 2026-11-11
 

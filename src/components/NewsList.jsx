@@ -1,6 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { NewsFeedback } from './NewsFeedback.jsx';
+import { NewsHeader } from './NewsHeader.jsx';
 import { NewsRow } from './NewsRow.jsx';
+import { useMediaQuery } from '../hooks/useMediaQuery.js';
+import { columnPlan, layoutClass, limitColumnWidth } from '../utils/columns.js';
 
 export function NewsList({
   articles,
@@ -10,6 +13,9 @@ export function NewsList({
   loading,
   error,
   hasQuery,
+  columnWidths,
+  onColumnResize,
+  onColumnReset,
   onSelect,
   onMarkRead,
   onToggleRead,
@@ -17,6 +23,9 @@ export function NewsList({
   onRetry,
 }) {
   const bodyRef = useRef(null);
+  const headerRef = useRef(null);
+  const [resizing, setResizing] = useState(false);
+  const wide = useMediaQuery('(min-width: 901px)');
 
   useEffect(() => {
     if (!selectedId || !bodyRef.current) return;
@@ -24,31 +33,52 @@ export function NewsList({
     row?.scrollIntoView({ block: 'nearest' });
   }, [selectedId]);
 
+  const applied = wide ? columnWidths : undefined;
+  const plan = columnPlan(applied);
+  const panelClass = ['news-panel', layoutClass(applied), resizing ? 'is-resizing' : '']
+    .filter(Boolean)
+    .join(' ');
+
+  const handleResizeStart = useCallback(() => {
+    setResizing(true);
+  }, []);
+
+  const handleResize = useCallback(
+    (column, width) => {
+      onColumnResize(column, limitColumnWidth(column, width));
+    },
+    [onColumnResize],
+  );
+
+  const handleResizeEnd = useCallback(() => {
+    setResizing(false);
+  }, []);
+
+  const handleReset = useCallback(
+    (column) => {
+      onColumnReset(column);
+    },
+    [onColumnReset],
+  );
+
   const showLoading = loading && articles.length === 0;
   const showError = !loading && Boolean(error) && articles.length === 0;
 
   return (
-    <section className="news-panel" aria-label="Lista de noticias">
+    <section
+      className={panelClass}
+      style={wide ? { ...plan.vars, '--news-min-width': `${plan.minWidth}px` } : undefined}
+      aria-label="Lista de noticias"
+    >
       <div className="news-body" ref={bodyRef} role="rowgroup">
-        <div className="news-header" role="row">
-          <span className="news-head-cell news-head-state" role="columnheader" />
-          <span className="news-head-cell" role="columnheader">
-            Título
-          </span>
-          <span className="news-head-cell news-head-author" role="columnheader">
-            Autor
-          </span>
-          <span className="news-head-cell news-head-category" role="columnheader">
-            Categoría
-          </span>
-          <span className="news-head-cell news-head-source" role="columnheader">
-            Fuente
-          </span>
-          <span className="news-head-cell news-head-date" role="columnheader">
-            Publicado
-          </span>
-          <span className="news-head-cell news-head-star" role="columnheader" />
-        </div>
+        <NewsHeader
+          headerRef={headerRef}
+          columnWidths={applied}
+          onResizeStart={handleResizeStart}
+          onResize={handleResize}
+          onResizeEnd={handleResizeEnd}
+          onReset={handleReset}
+        />
 
         <NewsFeedback
           showLoading={showLoading}

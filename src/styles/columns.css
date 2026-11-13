@@ -1,0 +1,124 @@
+/* Anchos de las columnas de la tabla de noticias */
+
+.news-panel {
+  --col-estado: 20px;
+  --col-titulo: minmax(0px, 1fr);
+  --col-autor: 92px;
+  --col-categoria: 86px;
+  --col-fuente: 96px;
+  --col-publicado: 70px;
+  --col-estrella: 24px;
+  --news-min-width: 0px;
+}
+
+.news-header,
+.news-row {
+  grid-template-columns:
+    var(--col-estado)
+    var(--col-titulo)
+    var(--col-autor)
+    var(--col-categoria)
+    var(--col-fuente)
+    var(--col-publicado)
+    var(--col-estrella);
+  min-width: var(--news-min-width);
+}
+
+/* Cuando la fecha absorbe el sobrante su cabecera se alinea a la derecha */
+.news-panel--flex-fecha .news-head-date {
+  text-align: right;
+}
+
+/* Cuando la estrella absorbe el sobrante su icono queda en el borde derecho */
+.news-panel--flex-estrella .news-star {
+  justify-content: flex-end;
+}
+
+/* Tirador de redimensión de columnas */
+.column-resizer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 9px;
+  height: 100%;
+  cursor: col-resize;
+  touch-action: none;
+  user-select: none;
+}
+
+.column-resizer::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 2px;
+  height: 100%;
+  content: '';
+  background: transparent;
+}
+
+.column-resizer:hover::after,
+.column-resizer:focus-visible::after {
+  background: #308cc6;
+}
+
+.column-resizer:focus-visible {
+  outline: 1px solid #308cc6;
+  outline-offset: -1px;
+}
+
+.news-panel.is-resizing,
+.news-panel.is-resizing .news-header,
+.news-panel.is-resizing .news-row {
+  cursor: col-resize;
+  user-select: none;
+}
+
+@media (max-width: 900px) {
+  .news-panel {
+    --col-autor: 82px;
+    --col-fuente: 92px;
+    --col-publicado: 66px;
+  }
+
+  .news-header,
+  .news-row {
+    grid-template-columns:
+      var(--col-estado)
+      var(--col-titulo)
+      var(--col-autor)
+      var(--col-fuente)
+      var(--col-publicado)
+      var(--col-estrella);
+  }
+
+  .news-head-category,
+  .news-category {
+    display: none;
+  }
+
+  .column-resizer {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .news-panel {
+    --col-publicado: 64px;
+  }
+
+  .news-header,
+  .news-row {
+    grid-template-columns:
+      var(--col-estado)
+      var(--col-titulo)
+      var(--col-publicado)
+      var(--col-estrella);
+  }
+
+  .news-head-author,
+  .news-author,
+  .news-head-source,
+  .news-source {
+    display: none;
+  }
+}
