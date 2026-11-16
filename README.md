@@ -194,10 +194,11 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
 
 ## Mantenimiento automatizado
 
-- `.github/dependabot.yml` revisa a diario, a las 04:00 de Europa/Madrid, las
-  dependencias de npm y de GitHub Actions, y abre las actualizaciones contra `main`.
-  Todas las actualizaciones de cada ecosistema se agrupan en un único PR (uno de npm
-  y otro de GitHub Actions) para que un solo merge compile y despliegue en Vercel.
+- `.github/dependabot.yml` revisa a diario las dependencias de npm (04:30 de
+  Europa/Madrid) y de GitHub Actions (05:30), y abre las actualizaciones contra
+  `main`. Todas las actualizaciones de cada ecosistema se agrupan en un único PR
+  (uno de npm y otro de GitHub Actions), con horarios separados para que un solo
+  merge compile y despliegue en Vercel cada vez.
 - `.github/workflows/auto-merge.yml` fusiona automáticamente los PR de Dependabot.
   Intenta activar el auto-merge de GitHub y, si `main` no tiene reglas de protección,
   espera a que pase CI y hace la fusión directa con `gh pr merge --squash`.
