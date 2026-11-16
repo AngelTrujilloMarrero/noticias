@@ -200,7 +200,7 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
   y otro de GitHub Actions) para que un solo merge compile y despliegue en Vercel.
 - `.github/workflows/auto-merge.yml` fusiona automáticamente los PR de Dependabot.
   Intenta activar el auto-merge de GitHub y, si `main` no tiene reglas de protección,
-  hace la fusión directa con `gh pr merge --squash`.
+  espera a que pase CI y hace la fusión directa con `gh pr merge --squash`.
 - `.github/workflows/update-node.yml` se ejecuta a diario a las 03:00 UTC (madrugada
   en España). Consulta la última versión LTS de Node.js y, si hay una versión mayor
   nueva, actualiza `.nvmrc`, `package.json`, `package-lock.json` y el README y sube
@@ -218,9 +218,9 @@ de medios coincide, y comparte el mismo estado de feeds, lectura y destacados.
 
 - Las actualizaciones de Dependabot se agrupan en un único PR por ecosistema
   (npm y GitHub Actions) y se fusionan automáticamente en `main` mediante
-  `.github/workflows/auto-merge.yml`. Así cada actualización llega a producción con
-  un solo despliegue de Vercel y se evita que varios merges seguidos dejen la
-  penúltima versión publicada.
+  `.github/workflows/auto-merge.yml`, solo después de que pase CI. Así cada
+  actualización llega a producción con un solo despliegue de Vercel y se evita que
+  varios merges seguidos dejen la penúltima versión publicada.
 
 ### 2026-11-13
 
