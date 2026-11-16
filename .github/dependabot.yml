@@ -5,8 +5,8 @@ updates:
     directory: '/'
     schedule:
       interval: daily
-      # 30 minutos después del actualizador de Node.js (03:00 UTC) para no
-      # provocar dos despliegues de Vercel solapados.
+      # Con 30 minutos de separación del actualizador de Node.js (03:00 UTC)
+      # para no provocar dos despliegues de Vercel solapados.
       time: '04:30'
       timezone: Europe/Madrid
     target-branch: main
