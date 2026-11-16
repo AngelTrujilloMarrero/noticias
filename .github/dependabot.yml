@@ -12,16 +12,9 @@ updates:
     labels:
       - dependencias
     groups:
-      produccion:
-        dependency-type: production
-        update-types:
-          - minor
-          - patch
-      desarrollo:
-        dependency-type: development
-        update-types:
-          - minor
-          - patch
+      todas:
+        patterns:
+          - '*'
     commit-message:
       prefix: 'chore(deps)'
 
@@ -36,5 +29,9 @@ updates:
     labels:
       - dependencias
       - github-actions
+    groups:
+      todas:
+        patterns:
+          - '*'
     commit-message:
       prefix: 'chore(actions)'
